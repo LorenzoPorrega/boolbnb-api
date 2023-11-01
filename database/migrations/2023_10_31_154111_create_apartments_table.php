@@ -16,6 +16,7 @@ return new class extends Migration
             
             $table->string("title");
             $table->string("adress");
+            $table->integer("price");
             $table->string("image_url");
             $table->integer("rooms_num");
             $table->integer("beds_num");
