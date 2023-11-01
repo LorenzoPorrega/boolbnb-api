@@ -42,4 +42,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    // Relazione one-to-many con Apartment
+    public function apartments() {
+        return $this->hasMany('Apartment');
+    }
 }
