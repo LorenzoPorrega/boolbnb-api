@@ -37,6 +37,7 @@ class ApartmentUpsertRequest extends FormRequest
       "bathroom_num" => "required|integer",
       "visibility" => "required|boolean",
       "square_meters" => "required|integer",
+      "user_id" => "required|string",
     ];
   }
   

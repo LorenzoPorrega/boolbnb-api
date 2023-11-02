@@ -20,8 +20,8 @@ class Apartment extends Model
         'visibility',
         'square_meters',
         'longitude',
-        'latitude'
-       
+        'latitude',
+        'user_id'
     ];
 
     public function amenities() {
