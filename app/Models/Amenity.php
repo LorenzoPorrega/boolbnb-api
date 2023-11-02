@@ -9,11 +9,17 @@ class Amenity extends Model
 {
     use HasFactory;
 
+
+    protected $fillable = [
+        'name',
+        'icon',
+        'description',
+        'category'
+    ];
+
     // Relazione many-to-many con Apartment tramite una tabella ponte 'apartment_amenity'
-    public function apartments() {
+    public function apartments()
+    {
         return $this->belongsToMany('Apartment', 'apartment_amenity');
     }
-
 }
-
-
