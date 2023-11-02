@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ApartmentUpsertRequest;
+use App\Models\Amenity;
 use Illuminate\Http\Request;
 use App\Models\Apartment;
 use Illuminate\Support\Str;
@@ -47,7 +48,8 @@ class ApartmentController extends Controller
    * Show the form for creating a new resource.
    */
   public function create(){
-    
+    $amenities = Amenity::all();
+    return view("admin.apartment.create", compact("amenities"));
   }
 
   /**
