@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Log;
 
 class ApartmentController extends Controller
 {
@@ -65,17 +66,18 @@ class ApartmentController extends Controller
    */
   public function store(ApartmentUpsertRequest $request){
     $data = $request->validated();
-
+    
+    error_log('Some message here.');
     $user_id = $this->getUserId();
+
     $data["user_id"] = $user_id;
     // $data["id"] = $this->generateSlug($data, $data["title"]);
 
-    $data["images"] = Storage::put("apartments", $data["images"]);
+    $data["images"] = Storage::putFile("apartments", $data["images"]);
 
     $apartment = Apartment::create($data);
 
-    // return the show route with the id as the new project's id
-    return redirect()->route("admin.apartments.index", [$apartment->id, $user_id]);
+    return redirect()->route("admin.apartments.index");
   }
 
   /**

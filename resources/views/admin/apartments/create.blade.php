@@ -19,7 +19,7 @@
                     <div class="mb-3">
                       <label class="form-label">Address</label>
                       <div>
-                        <input type="text" class="form-control" value="{{old('adress')}}" name="adress">
+                        <input type="text" class="form-control" value="{{old('address')}}" name="address">
                       </div>
                     </div>
 
