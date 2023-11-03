@@ -10,6 +10,6 @@ class Sponsorship extends Model
     use HasFactory;
     // Relazione many-to-many con Apartment tramite una tabella ponte 'apartment_sponsorship'
     public function apartments() {
-        return $this->belongsToMany('Apartment', 'apartment_sponsorship');
+        return $this->belongsToMany(Apartment::class, 'sponsorship_apartment');
     }
 }

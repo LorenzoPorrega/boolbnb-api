@@ -27,16 +27,17 @@ class ApartmentUpsertRequest extends FormRequest
       "title" => "required|string|max:50",
       "address" => "required|string",
       "price" => "required|integer",
-      "images" => "required|image|max:10240",
+      'images' => 'required|array',
       "description" => "required|string|max:500",
       "rooms_num" => "required|integer",
       "beds_num" => "required|integer",
       "bathroom_num" => "required|integer",
       "visibility" => "required|boolean",
-      "square_meters" => "required|integer"
+      "square_meters" => "required|integer",
+      "amenity" => "required|array"
     ];
   }
-  
+   // "images" => "required|image|max:10240",
 	/**
 	 * Get the error messages for the defined validation rules.
 	 *

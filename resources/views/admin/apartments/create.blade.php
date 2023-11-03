@@ -34,15 +34,14 @@
                     {{-- image --}}
                     <div class="mb-3">
                       <label class="form-label">Images</label>
-                      <input type="file" accept="images/*" class="form-control" name="images" multiple="multiple">
+                      <input type="file" accept="images/*" class="form-control" name="images[]" multiple="multiple">
                     </div>
 
                     {{-- description --}}
                     <div class="mb-3">
                       <label class="form-label">Description</label>
                       <div>
-                        <textarea class="form-control" style="height: 150px;" name="description">{{old('description')}}
-                        </textarea>
+                        <textarea class="form-control" style="height: 150px;" name="description">{{old('description')}}</textarea>
                       </div>
                     </div>
                     
@@ -110,13 +109,15 @@
                                 </h2>
                                 <div id="{{"collapse" . $counter}}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                                   <div class="accordion-body d-flex flex-column">
-                                    @foreach ($singleCategory["names"] as $singleAmenity)
+                                    @foreach ($amenitiesServices as $singleAmenity)
+                                    @if($singleAmenity->category == $singleCategory["category"])
                                     <div>
-                                      <input class="form-check-input" type="checkbox" value="{{old('amenity')}}" id="flexCheckDefault" name="amenity">
+                                      <input class="form-check-input" type="checkbox" value="{{$singleAmenity->id}}" id="flexCheckDefault" name="amenity[]">
                                       <span class="form-check-label" for="flexCheckDefault">
-                                        {{ $singleAmenity }}
+                                        {{ $singleAmenity->name }}
                                       </span>
                                     </div>
+                                    @endif
                                     @endforeach
                                   </div>
                                 </div>

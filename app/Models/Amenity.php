@@ -20,6 +20,6 @@ class Amenity extends Model
     // Relazione many-to-many con Apartment tramite una tabella ponte 'apartment_amenity'
     public function apartments()
     {
-        return $this->belongsToMany('Apartment', 'apartment_amenity');
+        return $this->belongsToMany(Apartment::class, 'amenity_apartment');
     }
 }

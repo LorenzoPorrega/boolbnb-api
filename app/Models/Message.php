@@ -11,7 +11,7 @@ class Message extends Model
 
     // Relazione many-to-one con Apartment
     public function apartment() {
-        return $this->belongsTo('Apartment');
+        return $this->belongsTo(Apartment::class);
     }
 
 }

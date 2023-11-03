@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Apartment extends Model
 {
-    use HasFactory;
+    use HasFactory,SoftDeletes;
 
     protected $fillable = [
         'slug',
@@ -22,6 +23,10 @@ class Apartment extends Model
         'visibility',
         'square_meters',
         'user_id'
+    ];
+    
+    protected $casts = [
+        'images' => 'array'
     ];
 
     public function amenities() {
