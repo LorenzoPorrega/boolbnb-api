@@ -43,8 +43,9 @@ class ApartmentController extends Controller{
    * Display a listing of the resource.
    */
   public function index(){
+    $user_id = Auth::id();
     $apartments = Apartment::all();
-    return view('admin.apartments.index', compact("apartments"));
+    return view('admin.apartments.index', compact("apartments","user_id"));
   }
 
   /**
@@ -88,8 +89,17 @@ class ApartmentController extends Controller{
     // A slug is generated where slug = title if (!title = already existing title), otherwise a slug is created via title + counter
     $data["slug"] = $this->generateSlug($data, $data["title"]);
     // The provided apartment's images are put in public/storage/apartment dir
-    $data["images"] = Storage::putFile("apartments", $data["images"]);
+    // $data["images"] = Storage::putFile("apartments", $data["images"]);
+    $images = [];
 
+    foreach ($data['images'] as $image) {
+        $fileName = uniqid() . '.' . $image->getClientOriginalExtension();
+        $image_path =  $image->storeAs('apartments', $fileName, 'public');
+
+        array_push($images, $image_path);
+    }
+
+    $data['images'] = $images;
     $apartment = Apartment::create($data);
 
     if (key_exists("amenities", $data)) {
@@ -105,6 +115,10 @@ class ApartmentController extends Controller{
   public function show(Apartment $apartment)
   {
     //
+    // $apartment = Apartment::findOrFail($id);
+    // $apartment::findOrFail($apartment['slug']);
+    $apartment->where('slug', $apartment->with('slug'));
+    return view('admin.apartments.show', ["apartment" => $apartment]);
   }
 
   /**
