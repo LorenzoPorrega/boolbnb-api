@@ -14,6 +14,10 @@ class AtLeastOneChecked implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        //
+        $amenityValues = request()->input($attribute);
+
+        if (!in_array(true, $amenityValues)) {
+            $fail("Please select at least one $attribute.");
+        }
     }
 }
