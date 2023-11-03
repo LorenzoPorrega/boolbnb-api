@@ -105,6 +105,10 @@ class ApartmentController extends Controller{
   public function show(Apartment $apartment)
   {
     //
+    // $apartment = Apartment::findOrFail($id);
+    // $apartment::findOrFail($apartment['slug']);
+    $apartment->where('slug', $apartment->with('slug'));
+    return view('admin.apartments.show', ["apartment" => $apartment]);
   }
 
   /**

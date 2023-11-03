@@ -19,10 +19,11 @@
         <h3>{{$apartment ['title']}}</h3>
         <h4>{{$apartment ['adress']}}</h4>
         <p>{{$apartment['description']}}</p>
-        <a href="{{route("admin.show",["apartment"=>$apartment->id])}}"><button type=
+        <img src="{{ asset('storage/' . $apartment->images) }}" alt="">
+        <a href="{{route("admin.apartments.show",$apartment)}}"><button type=
             "submit" class="btn btn-primary">Show</button></a>
         <a href="{{ route("admin.apartments.edit", $apartment->id )}}">Modifica</a>
-        <form action="{{ route('admin.portfolio.destroy', $apartment->id) }}" method="POST">
+        <form action="{{ route('admin.apartments.destroy', $apartment->id) }}" method="POST">
             @csrf
 
             @method('DELETE')
