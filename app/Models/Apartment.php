@@ -23,6 +23,10 @@ class Apartment extends Model
         'square_meters',
         'user_id'
     ];
+    
+    protected $casts = [
+        'images' => 'array'
+    ];
 
     public function amenities() {
         return $this->belongsToMany(Amenity::class);
