@@ -34,7 +34,7 @@
                     {{-- image --}}
                     <div class="mb-3">
                       <label class="form-label">Images</label>
-                      <input type="file" accept="images/*" class="form-control" name="images" multiple="multiple">
+                      <input type="file" accept="images/*" class="form-control" name="images[]" multiple="multiple">
                     </div>
 
                     {{-- description --}}

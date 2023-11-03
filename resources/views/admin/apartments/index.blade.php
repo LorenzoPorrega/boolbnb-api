@@ -12,26 +12,31 @@
 </html> --}}
 @extends('layouts.app')
 @section('content')
-{{-- <h2>I tuoi appartamenti</h2> --}}
+    {{-- <h2>I tuoi appartamenti</h2> --}}
     <ul class="list-group">
-@foreach ($apartments as $apartment )
-    <li class="list-group-item" >
-        <h3>{{$apartment ['title']}}</h3>
-        <h4>{{$apartment ['adress']}}</h4>
-        <p>{{$apartment['description']}}</p>
-        <img src="{{ asset('storage/' . $apartment->images) }}" alt="">
-        <a href="{{route("admin.apartments.show",$apartment)}}"><button type=
-            "submit" class="btn btn-primary">Show</button></a>
-        <a href="{{ route("admin.apartments.edit", $apartment->id )}}">Modifica</a>
-        <form action="{{ route('admin.apartments.destroy', $apartment->id) }}" method="POST">
-            @csrf
 
-            @method('DELETE')
+        @foreach ($apartments as $apartment)
+            @if ($apartment->user_id == $user_id)
+                <li class="list-group-item">
+                    <h3>{{ $apartment['title'] }}</h3>
+                    <h4>{{ $apartment['adress'] }}</h4>
+                    <p>{{ $apartment['description'] }}</p>
+                    <img src="{{ asset('storage/' . $apartment->images[0]) }}" alt="">
+                    <a href="{{ route('admin.apartments.show', $apartment) }}"><button type=
+                    "submit"
+                            class="btn btn-primary">Show</button></a>
+                    <a href="{{ route('admin.apartments.edit', $apartment->id) }}">Modifica</a>
+                    <form action="{{ route('admin.apartments.destroy', $apartment->id) }}" method="POST">
+                        @csrf
 
-            <button class="btn btn-danger">Elimina</button>
+                        @method('DELETE')
 
-        </form>
-    </li>
-@endforeach
-</ul>
+                        <button class="btn btn-danger">Elimina</button>
+
+                    </form>
+                </li>
+            @endif
+        @endforeach
+
+    </ul>
 @endsection
