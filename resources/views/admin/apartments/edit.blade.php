@@ -3,8 +3,7 @@
     <div class="container my-5">
         <div class="row justify-content-center">
             <div class="col-8">
-
-                <form action="{{ route('admin.apartments.update',$apartment->id) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.apartments.update', $apartment->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf()
                     @method('put')
                     {{-- title --}}

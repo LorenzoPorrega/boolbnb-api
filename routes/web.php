@@ -39,8 +39,9 @@ Route::middleware('auth')
     ->prefix('admin')
     ->name('admin.')
     ->group(function(){
+        Route::get('/apartments/{$slug}', [ApartmentController::class, 'show'])->name('apartments.show');
+        Route::get('/apartments/{$slug}/edit', [ApartmentController::class, 'edit'])->name('apartments.edit');
         Route::resource('apartments', ApartmentController::class);
-        /* Route::get("/apartments/{apartment}", [ApartmentController::class, "show"])->name("apartments.show"); */
 });
 
 require __DIR__.'/auth.php';
