@@ -13,6 +13,6 @@ class ApartmentController extends Controller {
         $apartments = Apartment::all();
 
         // restituisco in formato JSON
-        return response()->json($apartments);
+        return response()->json(['results' => $apartments]);
     }
 }
