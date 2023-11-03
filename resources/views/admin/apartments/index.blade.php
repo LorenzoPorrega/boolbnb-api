@@ -21,7 +21,7 @@
                     <h3>{{ $apartment['title'] }}</h3>
                     <h4>{{ $apartment['adress'] }}</h4>
                     <p>{{ $apartment['description'] }}</p>
-                    <img src="{{ asset('storage/' . $apartment->images[0]) }}" alt="">
+                    <img class="img-show" src="{{ asset('storage/' . $apartment->images[0]) }}" alt="">
                     <a href="{{ route('admin.apartments.show', $apartment) }}"><button type=
                     "submit"
                             class="btn btn-primary">Show</button></a>
