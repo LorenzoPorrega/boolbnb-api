@@ -12,11 +12,8 @@ class ApartmentUpsertRequest extends FormRequest
    */
   public function authorize(): bool
   {
-    if($user = Auth::user()){
-      return true;
-    }else{
-      return false;
-    }
+    // Checks if the user is authorized or not, it return true if auth'd, false if not
+    return Auth::check();
   }
 
   /**
@@ -28,7 +25,7 @@ class ApartmentUpsertRequest extends FormRequest
   {
     return [
       "title" => "required|string|max:50",
-      "adress" => "required|string",
+      "address" => "required|string",
       "price" => "required|integer",
       "images" => "required|image|max:10240",
       "description" => "required|string|max:500",
@@ -36,7 +33,7 @@ class ApartmentUpsertRequest extends FormRequest
       "beds_num" => "required|integer",
       "bathroom_num" => "required|integer",
       "visibility" => "required|boolean",
-      "square_meters" => "required|integer",
+      "square_meters" => "required|integer"
     ];
   }
   
@@ -49,7 +46,7 @@ class ApartmentUpsertRequest extends FormRequest
 	{
 		return [
 			'title.required' => 'A title is required.',
-			'adress.required' => 'An address is required',
+			'address.required' => 'An address is required',
 			'description.required' => 'A description is required.',
 			'images.required' => "At least one apartment's image is required.",
 			'rooms_num.required' => "You need to provide the rooms number.",

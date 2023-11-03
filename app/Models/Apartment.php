@@ -10,41 +10,41 @@ class Apartment extends Model
     use HasFactory;
 
     protected $fillable = [
+        'slug',
         'title',
         'address',
         'price',
-        'image_url',
+        'images',
+        'description',
         'rooms_num',
         'beds_num',
         'bathroom_num',
         'visibility',
         'square_meters',
-        'longitude',
-        'latitude'
-       
+        'user_id'
     ];
 
     public function amenities() {
-        return $this->belongsToMany('Amenity', 'apartment_amenity');
+        return $this->belongsToMany(Amenity::class);
     }
 
     // Relazione many-to-one con User
-    public function user() {
-        return $this->belongsTo('User');
+    public function users() {
+        return $this->belongsTo(User::class);
     }
 
     // Relazione many-to-many con Sponsorship tramite una tabella ponte 'apartment_sponsorship'
     public function sponsorships() {
-        return $this->belongsToMany('Sponsorship', 'apartment_sponsorship');
+        return $this->belongsToMany(Sponsorship::class);
     }
 
     // Relazione one-to-many con View
     public function views() {
-        return $this->hasMany('View');
+        return $this->hasMany(View::class);
     }
 
     // Relazione one-to-many con Message
     public function messages() {
-        return $this->hasMany('Message');
+        return $this->hasMany(Message::class);
     }
-}
+};
