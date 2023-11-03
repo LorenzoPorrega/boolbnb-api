@@ -14,20 +14,22 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Log;
 
-class ApartmentController extends Controller{
+class ApartmentController extends Controller
+{
 
-  protected function generateSlug($data, $title){
+  protected function generateSlug($data, $title)
+  {
     // Counter to start from a number
     $counter = 0;
     do {
-        //$slug will be the title of the stored Project + "-<counter-number>" if the counter is higher than zero, otherwise ""
+      //$slug will be the title of the stored Project + "-<counter-number>" if the counter is higher than zero, otherwise ""
       $slug = Str::slug($data["title"]) . ($counter > 0 ? "-" . $counter : "");
-        //it if there is a slug in DB called the same way than the just created slug
+      //it if there is a slug in DB called the same way than the just created slug
       $alreadyExists = Apartment::where("slug", $slug)->first();
-        //increase the counter
+      //increase the counter
       $counter++;
     } while ($alreadyExists);
-     //once the do-while cycle stopped because there where no other slug called the same way I establish the last made slug as the new Project's slug
+    //once the do-while cycle stopped because there where no other slug called the same way I establish the last made slug as the new Project's slug
     return $slug;
   }
 
@@ -42,35 +44,37 @@ class ApartmentController extends Controller{
   /**
    * Display a listing of the resource.
    */
-  public function index(){
+  public function index()
+  {
     $user_id = Auth::id();
     $apartments = Apartment::all();
-    return view('admin.apartments.index', compact("apartments","user_id"));
+    return view('admin.apartments.index', compact("apartments", "user_id"));
   }
 
   /**
    * Show the form for creating a new resource.
    */
-  public function create(){
+  public function create()
+  {
     /* $amenities = Amenity::all();
     // Return categories of amenities table non recursively
     $categoriesTitle = DB::table("amenities")->select("category")->groupBy("category")->get(); */
     $categories =  DB::table('amenities')
-    ->select('category', DB::raw('GROUP_CONCAT(name ORDER BY name ASC) AS name_list'))
-    ->groupBy('category')
-    ->orderBy('category', 'asc')
-    ->get();
+      ->select('category', DB::raw('GROUP_CONCAT(name ORDER BY name ASC) AS name_list'))
+      ->groupBy('category')
+      ->orderBy('category', 'asc')
+      ->get();
 
     // Elabora i risultati per ottenere un array di nomi per ogni categoria
     $data = [];
 
     foreach ($categories as $row) {
-        $category = $row->category;
-        $names = explode(',', $row->name_list);
-        $data[] = [
-            'category' => $category,
-            'names' => $names,
-        ];
+      $category = $row->category;
+      $names = explode(',', $row->name_list);
+      $data[] = [
+        'category' => $category,
+        'names' => $names,
+      ];
     }
     return view("admin.apartments.create", compact("data"));
   }
@@ -78,10 +82,11 @@ class ApartmentController extends Controller{
   /**
    * Store a newly created resource in storage.
    */
-  public function store(ApartmentUpsertRequest $request){
+  public function store(ApartmentUpsertRequest $request)
+  {
+    
     // Data is validate in the ApartmentUpsertRequest's rules
     $data = $request->validated();
-
     // the user_id is grabbed via the following method and assign to the corrispending value
     $user_id = Auth::id();
     $data["user_id"] = $user_id;
@@ -93,17 +98,17 @@ class ApartmentController extends Controller{
     $images = [];
 
     foreach ($data['images'] as $image) {
-        $fileName = uniqid() . '.' . $image->getClientOriginalExtension();
-        $image_path =  $image->storeAs('apartments', $fileName, 'public');
+      $fileName = uniqid() . '.' . $image->getClientOriginalExtension();
+      $image_path =  $image->storeAs('apartments', $fileName, 'public');
 
-        array_push($images, $image_path);
+      array_push($images, $image_path);
     }
 
     $data['images'] = $images;
     $apartment = Apartment::create($data);
 
-    if (key_exists("amenities", $data)) {
-      $apartment->amenities()->attach($data["amenities"]);
+    if (key_exists("amenity", $data)) {
+      $apartment->amenities()->attach($data["amenity"]);
     }
 
     return redirect()->route("admin.apartments.index");
@@ -124,24 +129,74 @@ class ApartmentController extends Controller{
   /**
    * Show the form for editing the specified resource.
    */
-  public function edit(Apartment $apartment)
+  public function edit($id)
   {
     //
+    //$project = Project::findOrFail($id);
+    $apartment = Apartment::findOrFail($id);
+    $amenities = Amenity::all();
+    $categories =  DB::table('amenities')
+      ->select('category', DB::raw('GROUP_CONCAT(name ORDER BY name ASC) AS name_list'))
+      ->groupBy('category')
+      ->orderBy('category', 'asc')
+      ->get();
+
+    // Elabora i risultati per ottenere un array di nomi per ogni categoria
+    $data = [];
+
+    foreach ($categories as $row) {
+      $category = $row->category;
+      $names = explode(',', $row->name_list);
+      $data[] = [
+        'category' => $category,
+        'names' => $names,
+      ];
+    }
+
+    return view("admin.apartments.edit", ["apartment" => $apartment, "amenities" => $amenities,"data" => $data]);
   }
 
   /**
    * Update the specified resource in storage.
    */
-  public function update(Request $request, Apartment $apartment)
+  public function update(ApartmentUpsertRequest $request, $id)
   {
     //
+
+    $apartment = Apartment::findOrFail($id);
+    $data = $request->validated();
+    $data["images"] = Storage::put("apartments", $data["images"]);
+    if (isset($data['images'])) {
+      if ($apartment['images']) {
+        Storage::delete($apartment['images']);
+      }
+      $images = [];
+
+      foreach ($data['images'] as $image) {
+        $fileName = uniqid() . '.' . $image->getClientOriginalExtension();
+        $image_path =  $image->storeAs('apartments', $fileName, 'public');
+
+        array_push($images, $image_path);
+      }
+
+      $data['images'] = $images;
+    }
+    $apartment->amenities()->sync($data["amenity"]);
+    $apartment->update($data);
+    return redirect()->route('admin.apartments.index');
   }
 
   /**
    * Remove the specified resource from storage.
    */
-  public function destroy(Apartment $apartment)
+  public function destroy($id)
   {
     //
+    $apartment = Apartment::findOrFail($id);
+    if ($apartment['images']) {
+      Storage::delete($apartment['images']);
+    }
+    $apartment->delete();
+    return redirect()->route("admin.apartments.index");
   }
 }

@@ -25,7 +25,7 @@
                     <a href="{{ route('admin.apartments.show', $apartment) }}"><button type=
                     "submit"
                             class="btn btn-primary">Show</button></a>
-                    <a href="{{ route('admin.apartments.edit', $apartment->id) }}">Modifica</a>
+                    <a href="{{ route('admin.apartments.edit',$apartment->id) }}">Modifica</a>
                     <form action="{{ route('admin.apartments.destroy', $apartment->id) }}" method="POST">
                         @csrf
 
