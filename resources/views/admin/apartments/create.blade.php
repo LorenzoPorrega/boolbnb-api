@@ -34,16 +34,14 @@
                     {{-- image --}}
                     <div class="mb-3">
                       <label class="form-label">Images</label>
-                      <input type="file" accept="images/*" class="form-control"
-                        name="images">
+                      <input type="file" accept="images/*" class="form-control" name="images" multiple="multiple">
                     </div>
 
                     {{-- description --}}
                     <div class="mb-3">
                       <label class="form-label">Description</label>
                       <div>
-                        <textarea class="form-control" style="height: 150px;"
-                          name="description">{{old('description')}}
+                        <textarea class="form-control" style="height: 150px;" name="description">{{old('description')}}
                         </textarea>
                       </div>
                     </div>
@@ -90,6 +88,45 @@
                       <label class="form-label">Square Meters</label>
                       <div>
                         <input type="text" class="form-control" value="{{old('square_meters')}}" name="square_meters">
+                      </div>
+                    </div>
+
+                    {{-- amenities --}}
+                    <div class="mb-3">
+                      <label class="form-label">Amenities</label>
+                      <div class="row d-flex">
+                        <h3>Amenities</h3>
+                        @php
+                          $counter = 1;
+                        @endphp
+                        @foreach ($data as $singleCategory)
+                          <div class="col-4 ms-auto">
+                            <div class="accordion mb-2" id="accordionExample">
+                              <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="{{"#collapse" . $counter}}" aria-expanded="false" aria-controls=`{{"collapse" . $counter}}`>
+                                    {{ $singleCategory["category"] }}
+                                  </button>
+                                </h2>
+                                <div id="{{"collapse" . $counter}}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                  <div class="accordion-body d-flex flex-column">
+                                    @foreach ($singleCategory["names"] as $singleAmenity)
+                                    <div>
+                                      <input class="form-check-input" type="checkbox" value="{{old('amenity')}}" id="flexCheckDefault" name="amenity">
+                                      <span class="form-check-label" for="flexCheckDefault">
+                                        {{ $singleAmenity }}
+                                      </span>
+                                    </div>
+                                    @endforeach
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          @php
+                            $counter++;
+                          @endphp
+                        @endforeach
                       </div>
                     </div>
 

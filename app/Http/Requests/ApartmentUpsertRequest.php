@@ -12,6 +12,7 @@ class ApartmentUpsertRequest extends FormRequest
    */
   public function authorize(): bool
   {
+    // Checks if the user is authorized or not, it return true if auth'd, false if not
     return Auth::check();
   }
 
