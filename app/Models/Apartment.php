@@ -22,8 +22,7 @@ class Apartment extends Model
         'bathroom_num',
         'visibility',
         'square_meters',
-        'user_id',
-        'amenity'
+        'user_id'
     ];
     
     protected $casts = [

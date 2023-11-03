@@ -34,7 +34,7 @@ class ApartmentUpsertRequest extends FormRequest
       "bathroom_num" => "required|integer",
       "visibility" => "required|boolean",
       "square_meters" => "required|integer",
-      "amenity" => "nullable"
+      "amenity" => "required|array"
     ];
   }
    // "images" => "required|image|max:10240",

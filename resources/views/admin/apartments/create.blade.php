@@ -99,7 +99,6 @@
                           $counter = 1;
                         @endphp
                         @foreach ($data as $singleCategory)
-                        @dd($data)
                           <div class="col-4 ms-auto">
                             <div class="accordion mb-2" id="accordionExample">
                               <div class="accordion-item">
@@ -110,13 +109,15 @@
                                 </h2>
                                 <div id="{{"collapse" . $counter}}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                                   <div class="accordion-body d-flex flex-column">
-                                    @foreach ($singleCategory["names"] as $singleAmenity)
+                                    @foreach ($amenitiesServices as $singleAmenity)
+                                    @if($singleAmenity->category == $singleCategory["category"])
                                     <div>
-                                      <input class="form-check-input" type="checkbox" value="{{old($singleAmenity)}}" id="flexCheckDefault" name="amenity[]">
+                                      <input class="form-check-input" type="checkbox" value="{{$singleAmenity->id}}" id="flexCheckDefault" name="amenity[]">
                                       <span class="form-check-label" for="flexCheckDefault">
-                                        {{ $singleAmenity }}
+                                        {{ $singleAmenity->name }}
                                       </span>
                                     </div>
+                                    @endif
                                     @endforeach
                                   </div>
                                 </div>

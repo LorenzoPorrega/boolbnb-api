@@ -76,7 +76,9 @@ class ApartmentController extends Controller
         'names' => $names,
       ];
     }
-    return view("admin.apartments.create", compact("data"));
+
+    $amenitiesServices = Amenity::all();
+    return view("admin.apartments.create", compact("data","amenitiesServices"));
   }
 
   /**
@@ -87,8 +89,10 @@ class ApartmentController extends Controller
     
     // Data is validate in the ApartmentUpsertRequest's rules
     $data = $request->validated();
+
     // the user_id is grabbed via the following method and assign to the corrispending value
     $user_id = Auth::id();
+
     $data["user_id"] = $user_id;
     /* $user_id = $this->getUserId(); */
     // A slug is generated where slug = title if (!title = already existing title), otherwise a slug is created via title + counter
@@ -107,8 +111,12 @@ class ApartmentController extends Controller
     $data['images'] = $images;
     $apartment = Apartment::create($data);
 
-    if (key_exists("amenity", $data)) {
-      $apartment->amenities()->attach($data["amenity"]);
+    if (isset($data["amenity"]) && is_array($data["amenity"]) && count($data["amenity"]) > 0) {
+      $apartment->amenities()->attach(
+        // foreach ($data['amenity'] as $singleAmenityId){
+        //   $data
+        // }
+        $data["amenity"]);
     }
 
     return redirect()->route("admin.apartments.index");
@@ -152,8 +160,8 @@ class ApartmentController extends Controller
         'names' => $names,
       ];
     }
-
-    return view("admin.apartments.edit", ["apartment" => $apartment, "amenities" => $amenities,"data" => $data]);
+    $amenitiesServices = Amenity::all();
+    return view("admin.apartments.edit", compact("apartment", "amenities","data", "amenitiesServices"));
   }
 
   /**
@@ -165,7 +173,6 @@ class ApartmentController extends Controller
 
     $apartment = Apartment::findOrFail($id);
     $data = $request->validated();
-    $data["images"] = Storage::put("apartments", $data["images"]);
     if (isset($data['images'])) {
       if ($apartment['images']) {
         Storage::delete($apartment['images']);
