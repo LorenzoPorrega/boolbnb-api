@@ -41,8 +41,7 @@
                     <div class="mb-3">
                       <label class="form-label">Description</label>
                       <div>
-                        <textarea class="form-control" style="height: 150px;" name="description">{{old('description')}}
-                        </textarea>
+                        <textarea class="form-control" style="height: 150px;" name="description">{{old('description')}}</textarea>
                       </div>
                     </div>
                     
