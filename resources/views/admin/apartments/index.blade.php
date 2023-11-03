@@ -12,6 +12,7 @@
 </html> --}}
 @extends('layouts.app')
 @section('content')
+{{-- <h2>I tuoi appartamenti</h2> --}}
     <ul class="list-group">
 @foreach ($apartments as $apartment )
     <li class="list-group-item" >
