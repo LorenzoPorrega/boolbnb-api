@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\ApartmentController;
+use App\Http\Controllers\Admin\ApartmentController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Route;
