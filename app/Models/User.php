@@ -48,6 +48,6 @@ class User extends Authenticatable
 
     // Relazione one-to-many con Apartment
     public function apartments() {
-        return $this->hasMany('Apartment');
+        return $this->hasMany(Apartment::class);
     }
 }
