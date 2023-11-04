@@ -36,7 +36,7 @@ class ApartmentUpsertRequest extends FormRequest
       "visibility" => "required|boolean",
       "square_meters" => "required|integer",
       "amenity" => "required|array|min:1",
-      'amenity.*' => [new AtLeastOneChecked]
+      /* 'amenity.*' => [new AtLeastOneChecked] */
     ];
   }
    // "images" => "required|image|max:10240",

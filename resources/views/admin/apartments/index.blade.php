@@ -27,7 +27,7 @@
         <img class="img-show" src="{{ asset('storage/' . $apartment->images[0]) }}" alt="">
         <a href="{{ route('admin.apartments.show', $apartment->slug) }}"><button type="submit"
                 class="btn btn-primary">Show</button></a>
-        <a href="{{ route('admin.apartments.edit', ["apartment" => $apartment]) }}">Modifica</a>
+        <a href="{{ route('admin.apartments.edit', $apartment->slug) }}">Modifica</a>
         <form action="{{ route('admin.apartments.destroy', $apartment->id) }}" method="POST">
             @csrf
             @method('DELETE')

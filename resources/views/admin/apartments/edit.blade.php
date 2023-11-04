@@ -3,14 +3,14 @@
     <div class="container my-5">
         <div class="row justify-content-center">
             <div class="col-8">
-                <form action="{{ route('admin.apartments.update', $apartment->id) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.apartments.update', $apartment[0]->slug) }}" method="POST" enctype="multipart/form-data">
                     @csrf()
                     @method('put')
                     {{-- title --}}
                     <div class="mb-3">
                         <label class="form-label">Title</label>
                         <div>
-                            <input type="text" class="form-control" value="{{ old('title',$apartment->title ) }}" name="title">
+                            <input type="text" class="form-control" value="{{ old('title',$apartment[0]->title ) }}" name="title">
                         </div>
                     </div>
 
@@ -18,7 +18,7 @@
                     <div class="mb-3">
                         <label class="form-label">Address</label>
                         <div>
-                            <input type="text" class="form-control" value="{{ old('address',$apartment->address) }}" name="address">
+                            <input type="text" class="form-control" value="{{ old('address',$apartment[0]->address) }}" name="address">
                         </div>
                     </div>
 
@@ -26,7 +26,7 @@
                     <div class="mb-3">
                         <label class="form-label">Price</label>
                         <div>
-                            <input type="text" class="form-control" value="{{ old('price',$apartment->price) }}" name="price">
+                            <input type="text" class="form-control" value="{{ old('price',$apartment[0]->price) }}" name="price">
                         </div>
                     </div>
 
@@ -40,7 +40,7 @@
                     <div class="mb-3">
                         <label class="form-label">Description</label>
                         <div>
-                            <textarea class="form-control" style="height: 150px;" name="description">{{ old('description',$apartment->description) }}</textarea>
+                            <textarea class="form-control" style="height: 150px;" name="description">{{ old('description',$apartment[0]->description) }}</textarea>
                         </div>
                     </div>
 
@@ -48,7 +48,7 @@
                     <div class="mb-3">
                         <label class="form-label">Rooms Number</label>
                         <div>
-                            <input type="text" class="form-control" value="{{ old('rooms_num',$apartment->rooms_num) }}" name="rooms_num">
+                            <input type="text" class="form-control" value="{{ old('rooms_num',$apartment[0]->rooms_num) }}" name="rooms_num">
                         </div>
                     </div>
 
@@ -56,7 +56,7 @@
                     <div class="mb-3">
                         <label class="form-label">Beds Number</label>
                         <div>
-                            <input type="text" class="form-control" value="{{ old('beds_num',$apartment->beds_num) }}" name="beds_num">
+                            <input type="text" class="form-control" value="{{ old('beds_num',$apartment[0]->beds_num) }}" name="beds_num">
                         </div>
                     </div>
 
@@ -64,7 +64,7 @@
                     <div class="mb-3">
                         <label class="form-label">Bathrooms Number</label>
                         <div>
-                            <input type="text" class="form-control" value="{{ old('bathroom_num',$apartment->bathroom_num) }}"
+                            <input type="text" class="form-control" value="{{ old('bathroom_num',$apartment[0]->bathroom_num) }}"
                                 name="bathroom_num">
                         </div>
                     </div>
@@ -75,11 +75,11 @@
                         <div class="col-sm-9 d-flex flex-row">
                             <div class="d-flex" style="width: fit-content">
                                 <input type="radio" name="visibility" value="1" class="form-check-input mx-1"
-                                    @if (old('visibility',$apartment->visibility) == 1) checked @endif> Visibile
+                                    @if (old('visibility',$apartment[0]->visibility) == 1) checked @endif> Visibile
                             </div>
                             <div class="d-flex" style="width: fit-content">
                                 <input type="radio" name="visibility" value="0" class="form-check-input mx-1"
-                                    @if (old('visibility',$apartment->visibility) == 0) checked @endif> Non Visibile
+                                    @if (old('visibility',$apartment[0]->visibility) == 0) checked @endif> Non Visibile
                             </div>
                         </div>
                     </div>
@@ -88,7 +88,7 @@
                     <div class="mb-3">
                         <label class="form-label">Square Meters</label>
                         <div>
-                            <input type="text" class="form-control" value="{{ old('square_meters',$apartment->square_meters) }}"
+                            <input type="text" class="form-control" value="{{ old('square_meters',$apartment[0]->square_meters) }}"
                                 name="square_meters">
                         </div>
                     </div>
