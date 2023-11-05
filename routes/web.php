@@ -42,5 +42,10 @@ Route::middleware('auth')
         Route::resource('apartments', ApartmentController::class);
         /* Route::get("/apartments/{apartment}", [ApartmentController::class, "show"])->name("apartments.show"); */
 });
-
+Route::get('example', function () {
+    return view('example');
+});
+Route::get('tomtom', function () {
+    return view('tomtom');
+});
 require __DIR__.'/auth.php';
