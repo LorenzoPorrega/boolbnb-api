@@ -17,23 +17,26 @@
 </html> --}}
 @extends('layouts.app')
 @section('content')
-{{-- <h2>I tuoi appartamenti</h2> --}}
-<ul class="list-group">
-    @foreach ($apartments as $apartment)
-    <li class="list-group-item">
-        <h3>{{ $apartment['title'] }}</h3>
-        <h4>{{ $apartment['adress'] }}</h4>
-        <p>{{ $apartment['description'] }}</p>
-        <img class="img-show" src="{{ asset('storage/' . $apartment->images[0]) }}" alt="">
-        <a href="{{ route('admin.apartments.show', $apartment->slug) }}"><button type="submit"
-                class="btn btn-primary">Show</button></a>
-        <a href="{{ route('admin.apartments.edit', $apartment->slug) }}">Modifica</a>
-        <form action="{{ route('admin.apartments.destroy', $apartment->id) }}" method="POST">
-            @csrf
-            @method('DELETE')
-            <button class="btn btn-danger">Elimina</button>
-        </form>
-    </li>
-    @endforeach
-</ul>
+    {{-- <h2>I tuoi appartamenti</h2> --}}
+    <ul class="list-group">
+        @foreach ($apartments as $apartment)
+            <li class="list-group-item">
+                <h3><strong>Titolo: </strong>{{ $apartment['title'] }}</h3>
+                <h4><strong>Indirizzo: </strong>{{ $apartment['address'] }}</h4>
+                <p><strong>Descrizione: </strong>{{ $apartment['description'] }}</p>
+                <img class="img-show" src="{{ asset('storage/' . $apartment->images[0]) }}" alt="">
+                <div class="btn-container d-flex gap-3 my-2">
+                    <a href="{{ route('admin.apartments.show', $apartment->slug) }}"><button type="submit"
+                            class="btn btn-primary">Show</button></a>
+                    <a href="{{ route('admin.apartments.edit', $apartment->slug) }}"><button type="submit"
+                            class="btn btn-info">Modifica</button></a>
+                    <form action="{{ route('admin.apartments.destroy', $apartment->id) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-danger">Elimina</button>
+                    </form>
+                </div>
+            </li>
+        @endforeach
+    </ul>
 @endsection
