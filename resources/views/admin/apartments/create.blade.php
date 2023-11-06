@@ -9,7 +9,10 @@
                     
                     {{-- title --}}
                     <div class="mb-3">
-                      <label class="form-label">Title</label>
+                      <label class="form-label fw-bold fs-5">Title</label>
+                      @error('title')
+                        <p class="text-danger d-block px-1 mb-2 bg-danger-subtle rounded-2 border-danger">{{ $message }}</p>
+                      @enderror
                       <div>
                         <input type="text" class="form-control" value="{{old('title')}}" name="title">
                       </div>
@@ -17,7 +20,10 @@
 
                     {{-- address --}}
                     <div class="mb-3">
-                      <label class="form-label">Address</label>
+                      <label class="form-label fw-bold fs-5">Address</label>
+                      @error('address')
+                        <span class="text-danger d-block px-1 mb-2 bg-danger-subtle rounded-2 border-danger">{{ $message }}</span>
+                      @enderror
                       <div>
                         <input type="text" class="form-control" value="{{old('address')}}" name="address">
                       </div>
@@ -25,7 +31,10 @@
 
                     {{-- price --}}
                     <div class="mb-3">
-                      <label class="form-label">Price</label>
+                      <label class="form-label fw-bold fs-5">Daily stay price</label>
+                      @error('price')
+                        <p class="text-danger d-block px-1 mb-2 bg-danger-subtle rounded-2 border-danger">{{ $message }}</p>
+                      @enderror
                       <div>
                         <input type="text" class="form-control" value="{{old('price')}}" name="price">
                       </div>
@@ -33,13 +42,19 @@
 
                     {{-- image --}}
                     <div class="mb-3">
-                      <label class="form-label">Images</label>
+                      <label class="form-label fw-bold fs-5">Images</label>
+                      @error('images')
+                        <p class="text-danger d-block px-1 mb-2 bg-danger-subtle rounded-2 border-danger">{{ $message }}</p>
+                      @enderror
                       <input type="file" accept="images/*" class="form-control" name="images[]" multiple="multiple">
                     </div>
 
                     {{-- description --}}
                     <div class="mb-3">
-                      <label class="form-label">Description</label>
+                      <label class="form-label fw-bold fs-5">Description</label>
+                      @error('description')
+                        <p class="text-danger d-block px-1 mb-2 bg-danger-subtle rounded-2 border-danger">{{ $message }}</p>
+                      @enderror
                       <div>
                         <textarea class="form-control" style="height: 150px;" name="description">{{old('description')}}</textarea>
                       </div>
@@ -47,7 +62,10 @@
                     
                     {{-- rooms number --}}
                     <div class="mb-3">
-                      <label class="form-label">Rooms Number</label>
+                      <label class="form-label fw-bold fs-5">Rooms Number</label>
+                      @error('rooms_num')
+                        <p class="text-danger d-block px-1 mb-2 bg-danger-subtle rounded-2 border-danger">{{ $message }}</p>
+                      @enderror
                       <div>
                         <input type="text" class="form-control" value="{{old('rooms_num')}}" name="rooms_num">
                       </div>
@@ -55,7 +73,10 @@
 
                     {{-- beds number --}}
                     <div class="mb-3">
-                      <label class="form-label">Beds Number</label>
+                      <label class="form-label fw-bold fs-5">Beds Number</label>
+                      @error('beds_num')
+                        <p class="text-danger d-block px-1 mb-2 bg-danger-subtle rounded-2 border-danger">{{ $message }}</p>
+                      @enderror
                       <div>
                         <input type="text" class="form-control" value="{{old('beds_num')}}" name="beds_num">
                       </div>
@@ -63,7 +84,10 @@
 
                     {{-- bathrooms number --}}
                     <div class="mb-3">
-                      <label class="form-label">Bathrooms Number</label>
+                      <label class="form-label fw-bold fs-5">Bathrooms Number</label>
+                      @error('bathroom_num')
+                        <p class="text-danger d-block px-1 mb-2 bg-danger-subtle rounded-2 border-danger">{{ $message }}</p>
+                      @enderror
                       <div>
                         <input type="text" class="form-control" value="{{old('bathroom_num')}}" name="bathroom_num">
                       </div>
@@ -71,20 +95,23 @@
 
                     {{-- visibility --}}
                     <div class="row mb-3">
-                      <label class="col-3 col-form-label">Visibility</label>
-                      <div class="col-sm-9 d-flex flex-row">
-                        <div class="d-flex" style="width: fit-content">
-                          <input type="radio" name="visibility" value="1" class="form-check-input mx-1" @if(old('visibility') == 1) checked @endif> Visibile
+                      <label class="col-3 col-form-label fw-bold fs-5">Visibility</label>
+                      <div class="row w-100">
+                        <div>
+                          <input type="radio" name="visibility" value="1" class="form-check-input mx-1" @if(old('visibility') == 1) checked @endif>Already visible
                         </div>
-                        <div class="d-flex" style="width: fit-content">
-                          <input type="radio" name="visibility" value="0" class="form-check-input mx-1" @if(old('visibility') == 0) checked @endif> Non Visibile
+                        <div>
+                          <input type="radio" name="visibility" value="0" class="form-check-input mx-1" @if(old('visibility') == 0) checked @endif>Hidden for now
                         </div>
                       </div>
                     </div>
 
                     {{-- square meters --}}
                     <div class="mb-3">
-                      <label class="form-label">Square Meters</label>
+                      <label class="form-label fw-bold fs-5">Square Meters</label>
+                      @error('square_meters')
+                        <p class="text-danger d-block px-1 mb-2 bg-danger-subtle rounded-2 border-danger">{{ $message }}</p>
+                      @enderror
                       <div>
                         <input type="text" class="form-control" value="{{old('square_meters')}}" name="square_meters">
                       </div>
@@ -92,14 +119,16 @@
 
                     {{-- amenities --}}
                     <div class="mb-3">
-                      <label class="form-label">Amenities</label>
+                      <label class="form-label fw-bold fs-5">Amenities</label>
+                      @if ($errors->has('amenity'))
+                        <p class="text-danger d-block px-1 mb-2 bg-danger-subtle rounded-2 border-danger">{{ $errors->first('amenity') }}</p>
+                      @endif
                       <div class="row d-flex">
-                        <h3>Amenities</h3>
                         @php
                           $counter = 1;
                         @endphp
                         @foreach ($data as $singleCategory)
-                          <div class="col-4 ms-auto">
+                          <div class="col-12 col-xs-6 col-sm-6 col-lg-4">
                             <div class="accordion mb-2" id="accordionExample">
                               <div class="accordion-item">
                                 <h2 class="accordion-header">

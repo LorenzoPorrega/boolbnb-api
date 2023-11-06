@@ -134,13 +134,14 @@ class ApartmentController extends Controller
   /**
    * Show the form for editing the specified resource.
    */
-  public function edit(Apartment $apartment){
+  public function edit($slug){
+    // Istanzio un apartment come classe in base allo slug che passiamo nel bottone edit in index
+    $apartment = Apartment::where("slug", $slug)->get();
     
-    if($apartment->user_id != Auth::id()){ 
+    if($apartment[0]->user_id != Auth::id()){ 
       return abort(404);
     }
 
-    $apartment = Apartment::where('slug', $apartment->slug)->first();
     $categories =  DB::table('amenities')
       ->select('category', DB::raw('GROUP_CONCAT(name ORDER BY name ASC) AS name_list'))
       ->groupBy('category')
