@@ -7,12 +7,7 @@ html {
     box-sizing: inherit;
 }
 
-body {
-    color: #707070;
-    font-size: 14px;
-    margin: 0;
-    padding: 0;
-}
+
 
 a {
     text-decoration: none;
@@ -21,20 +16,24 @@ a {
     display: none;
 }
 .container{
-   
-    display: flex;
     margin: auto; 
-    margin-top: 8rem;
     max-width: 900px;
     position: relative;
+}
+.container-map{
     height: 50vh;
+    width: 50%;
+    margin: 3rem 0;
+    
 }
 .map {
-    bottom: 0;
-    left: 25%;
+    border: 2px solid brown;
+    left: 50%;
+    transform: translateX(-50%);
     position: absolute;
     top: 0;
-    width: 75%;
+    height: 100%;
+    width: 100%;
     /* z-index: -1; */
     /* ho tolto questo per modificare la mappa*/
 }

@@ -2,31 +2,38 @@
 @section('content')
     @vite(['resources/scss/style.css'])
     <div class="container">
-        <h1>Edit Post</h1>
+        <h1>Show Page</h1>
         {{-- @dd($apartment) --}}
-        <h2>{{ $apartment['title'] }}</h2>
+        <h2><strong>Titolo: </strong>{{ $apartment['title'] }}</h2>
         <div class="container-img-show">
             <img class="img-show" src="{{ asset('storage/' . $apartment->images[0]) }}" alt="">
         </div>
         {{-- <ul class="form-control" id="input">
             <li><input type="text" id="address" value=""></li>
         </ul> --}}
-        <h5>{{ $apartment->address }}
-            <input class="input-none" type="text" value="{{ $apartment->address }}" id="via">
-        </h5>
-        <input class="input-none" type="text"value="{{ $apartment->latitude }}" id="latitude" >
-        <input class="input-none" type="text" value="{{ $apartment->longitude }}" id="longitude">
-    </div>
-    <div class="container">
-        <div class='control-panel' style="display: none">
-            <div class='heading'>
-                <img src='img/logo.png'>
-            </div>
-            <div id='store-list'></div>
-        </div>
-        <div class='map' id='map'></div>
-    </div>
+        <h5><strong>Prezzo per notte: </strong>{{ $apartment->price }} €
+            <h5><strong>Numero di stanze: </strong>{{ $apartment->rooms_num }}
+                <h5><strong>Numero di letti: </strong>{{ $apartment->beds_num }}
+                    <h5><strong>Numero di bagni: </strong>{{ $apartment->bathroom_num }}
+                        <h5><strong>Metri quadrati: </strong>{{ $apartment->square_meters }} m<sup>2</sup>
+                            <h5><strong>Aggiunto il: </strong>{{ $apartment->created_at }}
+                                <h5><strong>Indirizzo: </strong>{{ $apartment->address }}
+                                    <input class="input-none" type="text" value="{{ $apartment->address }}" id="via">
+                                </h5>
+                                <input class="input-none" type="text"value="{{ $apartment->latitude }}" id="latitude">
+                                <input class="input-none" type="text" value="{{ $apartment->longitude }}"
+                                    id="longitude">
 
+                                <div class="container-map position-relative">
+                                    <div class='control-panel' style="display: none">
+                                        <div class='heading'>
+                                            <img src='img/logo.png'>
+                                        </div>
+                                        <div id='store-list'></div>
+                                    </div>
+                                    <div class='map' id='map'></div>
+                                </div>
+    </div>
     <script>
         const via = document.getElementById("via").value
         const latitude = document.getElementById("latitude").value
