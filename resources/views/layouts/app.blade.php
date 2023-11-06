@@ -34,7 +34,7 @@
     {{--  --}}
     <!-- Usando Vite -->
     @vite(['resources/scss/app.scss', 'resources/js/app.js'])
-    @vite(['resources/js/stores.js'])
+    @vite(['resources/js/research.js'])
 </head>
 </head>
 
@@ -98,7 +98,7 @@
                                     <a class="dropdown-item" href="{{ url('profile') }}">{{ __('Profile') }}</a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                                                    document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
 
