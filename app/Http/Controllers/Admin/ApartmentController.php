@@ -78,7 +78,7 @@ class ApartmentController extends Controller
     }
 
     $amenitiesServices = Amenity::all();
-    return view("admin.apartments.create", compact("data","amenitiesServices"));
+    return view("admin.apartments.create", compact("data", "amenitiesServices"));
   }
 
   /**
@@ -86,10 +86,21 @@ class ApartmentController extends Controller
    */
   public function store(ApartmentUpsertRequest $request)
   {
-    
-    // Data is validate in the ApartmentUpsertRequest's rules
-    $data = $request->validated();
 
+    // Data is validate in the ApartmentUpsertRequest's rules
+
+    $data = $request->validated();
+    $addressObject = json_decode($data["address"]);
+    //converto l'indirizzo da stringa a oggetto
+    $indirizzo = $addressObject->data->text;
+    $lat = $addressObject->data->result->position->lat;
+    // @dd($lat);
+    $long =$addressObject->data->result->position->lng;
+    $data["address"] = $indirizzo;
+    //solo con due cifre....
+    $data["longitude"] = $long;
+    $data["latitude"] = $lat;
+    //@dd($data);
     // the user_id is grabbed via the following method and assign to the corrispending value
     $user_id = Auth::id();
 
@@ -116,7 +127,8 @@ class ApartmentController extends Controller
         // foreach ($data['amenity'] as $singleAmenityId){
         //   $data
         // }
-        $data["amenity"]);
+        $data["amenity"]
+      );
     }
 
     return redirect()->route("admin.apartments.index");

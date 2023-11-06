@@ -25,8 +25,8 @@ return new class extends Migration
             $table->integer("bathroom_num");
             $table->boolean("visibility");
             $table->integer("square_meters");
-            $table->decimal("longitude", 8, 2)->nullable();
-            $table->decimal("latitude", 8, 2)->nullable();
+            $table->decimal("longitude", 11, 8)->nullable();
+            $table->decimal("latitude", 11, 8)->nullable();
 
             $table->timestamps();
         });

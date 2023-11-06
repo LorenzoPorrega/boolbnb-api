@@ -1,12 +1,13 @@
 @extends('layouts.app')
 @section('content')
+    
     <div class="container my-5">
         <div class="row justify-content-center">
             <div class="col-8">
 
                 <form action="{{ route('admin.apartments.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf()
-                    
+
                     {{-- title --}}
                     <div class="mb-3">
                       <label class="form-label fw-bold fs-5">Title</label>
@@ -20,13 +21,10 @@
 
                     {{-- address --}}
                     <div class="mb-3">
-                      <label class="form-label fw-bold fs-5">Address</label>
-                      @error('address')
-                        <span class="text-danger d-block px-1 mb-2 bg-danger-subtle rounded-2 border-danger">{{ $message }}</span>
-                      @enderror
-                      <div>
-                        <input type="text" class="form-control" value="{{old('address')}}" name="address">
-                      </div>
+                        <label class="form-label">Address</label>
+                        <div id="input">
+                            <input type="text" class="form-control" value="{{ old('address') }}"  name="address" id="address" style="display: none">
+                        </div>
                     </div>
 
                     {{-- price --}}
@@ -59,7 +57,7 @@
                         <textarea class="form-control" style="height: 150px;" name="description">{{old('description')}}</textarea>
                       </div>
                     </div>
-                    
+
                     {{-- rooms number --}}
                     <div class="mb-3">
                       <label class="form-label fw-bold fs-5">Rooms Number</label>
@@ -161,7 +159,7 @@
                     </div>
 
                     <div class="w-100 text-center">
-                        <a class="btn btn-secondary" href="{{ route("admin.apartments.index") }}">Cancel</a>
+                        <a class="btn btn-secondary" href="{{ route('admin.apartments.index') }}">Cancel</a>
                         <button class="btn btn-primary" type="submit">Save</button>
                     </div>
                 </form>
