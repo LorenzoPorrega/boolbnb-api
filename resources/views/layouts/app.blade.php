@@ -34,7 +34,7 @@
     {{--  --}}
     <!-- Usando Vite -->
     @vite(['resources/scss/app.scss', 'resources/js/app.js'])
-    {{-- @vite(['resources/js/research.js']) --}}
+    @vite(['resources/js/research.js'])
 </head>
 </head>
 
