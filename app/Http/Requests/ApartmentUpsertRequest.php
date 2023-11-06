@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\AtLeastOneChecked;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,17 +25,18 @@ class ApartmentUpsertRequest extends FormRequest
   public function rules(): array
   {
     return [
-      "title" => "nullable|string|max:50",
-      "address" => "nullable",
-      "price" => "nullable|integer",
-      'images' => 'nullable|array',
-      "description" => "nullable|string|max:500",
-      "rooms_num" => "nullable|integer",
-      "beds_num" => "nullable|integer",
-      "bathroom_num" => "nullable|integer",
-      "visibility" => "nullable|boolean",
-      "square_meters" => "nullable|integer",
-      "amenity" => "nullable|array"
+      "title" => "required|string|max:50",
+      "address" => "required|string",
+      "price" => "required|integer",
+      'images' => 'required|array',
+      "description" => "required|string|max:500",
+      "rooms_num" => "required|integer",
+      "beds_num" => "required|integer",
+      "bathroom_num" => "required|integer",
+      "visibility" => "required|boolean",
+      "square_meters" => "required|integer",
+      "amenity" => "required|array|min:1",
+      /* 'amenity.*' => [new AtLeastOneChecked] */
     ];
   }
    // "images" => "required|image|max:10240",
@@ -53,7 +55,10 @@ class ApartmentUpsertRequest extends FormRequest
 			'rooms_num.required' => "You need to provide the rooms number.",
 			'bathroom_num.required' => "You need to provide the bathrooms number.",
 			'beds_num.required' => "You need to provide the beds number.",
-      'square_meters.require' => "You need to provide a rough indication of the apartmetn's square meters.",
+      'square_meters.required' => "You need to provide a rough indication of the apartment's square meters.",
+      'amenity.require' => 'Please select at least one amenity.',
+      'amenity.min' => 'Please select at least one amenity.',
+      'amenity.*' => 'Please select at least one amenity.',
 		];
 	}
 }

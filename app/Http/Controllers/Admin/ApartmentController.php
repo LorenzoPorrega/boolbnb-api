@@ -46,9 +46,9 @@ class ApartmentController extends Controller
    */
   public function index()
   {
-    $user_id = Auth::id();
-    $apartments = Apartment::all();
-    return view('admin.apartments.index', compact("apartments", "user_id"));
+    $user = Auth::user();
+    $apartments = Apartment::where("user_id", $user->id)->get();
+    return view('admin.apartments.index', compact("apartments"));
   }
 
   /**
@@ -137,24 +137,23 @@ class ApartmentController extends Controller
   /**
    * Display the specified resource.
    */
-  public function show(Apartment $apartment)
+  public function show($slug)
   {
-    //
-    // $apartment = Apartment::findOrFail($id);
-    // $apartment::findOrFail($apartment['slug']);
-    $apartment->where('slug', $apartment->with('slug'));
-    return view('admin.apartments.show', ["apartment" => $apartment]);
+      $apartment = Apartment::where('slug', $slug)->firstOrFail();
+      return view('admin.apartments.show', compact('apartment'));
   }
 
   /**
    * Show the form for editing the specified resource.
    */
-  public function edit($id)
-  {
-    //
-    //$project = Project::findOrFail($id);
-    $apartment = Apartment::findOrFail($id);
-    $amenities = Amenity::all();
+  public function edit($slug){
+    // Istanzio un apartment come classe in base allo slug che passiamo nel bottone edit in index
+    $apartment = Apartment::where("slug", $slug)->get();
+    
+    if($apartment[0]->user_id != Auth::id()){ 
+      return abort(404);
+    }
+
     $categories =  DB::table('amenities')
       ->select('category', DB::raw('GROUP_CONCAT(name ORDER BY name ASC) AS name_list'))
       ->groupBy('category')
@@ -173,7 +172,7 @@ class ApartmentController extends Controller
       ];
     }
     $amenitiesServices = Amenity::all();
-    return view("admin.apartments.edit", compact("apartment", "amenities", "data", "amenitiesServices"));
+    return view("admin.apartments.edit", compact("apartment", "data", "amenitiesServices"));
   }
 
   /**
