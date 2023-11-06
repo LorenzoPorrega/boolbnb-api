@@ -25,22 +25,6 @@ class ApartmentController extends Controller
         $citta = end($indirizzo);
         $data = [
             "type" => "FeatureCollection",
-            //"features" => [
-                // [
-                //     "type" => "Feature",
-                //     "geometry" => [
-                //         "type" => "Point",
-                //         "coordinates" => [
-                //             $apartments[0]["longitude"],
-                //             $apartments[0]["latitude"]
-                //         ],
-                //         "properties" => [
-                //             "address" =>  $apartments[0]["address"],
-                //             "city" => $citta
-                //         ]
-                //     ]
-                // ]
-            //]
         ];
         $data["features"] = [];
         foreach ($apartments as $apartment) {

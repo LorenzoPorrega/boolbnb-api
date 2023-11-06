@@ -100,7 +100,7 @@ class ApartmentController extends Controller
     //solo con due cifre....
     $data["longitude"] = $long;
     $data["latitude"] = $lat;
-    @dd($data);
+    //@dd($data);
     // the user_id is grabbed via the following method and assign to the corrispending value
     $user_id = Auth::id();
 
