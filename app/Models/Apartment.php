@@ -22,11 +22,14 @@ class Apartment extends Model
         'bathroom_num',
         'visibility',
         'square_meters',
+        'longitude',
+        'latitude',
         'user_id'
     ];
     
     protected $casts = [
-        'images' => 'array'
+        'images' => 'array',
+        'address' => 'array'
     ];
 
     public function amenities() {

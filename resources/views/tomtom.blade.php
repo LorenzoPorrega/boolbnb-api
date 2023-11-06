@@ -17,11 +17,12 @@
     </script>
 
     @vite(['resources/scss/style.css', 'resources/js/stores.js'])
+
 </head>
 
 <body>
     <ul class="form-control" id="input">
-        <li></li>
+        <li><input type="text" id="address" value=""></li>
     </ul>
     <div class="container">
         <div class='control-panel'>

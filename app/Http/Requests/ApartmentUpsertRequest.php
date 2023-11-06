@@ -24,17 +24,17 @@ class ApartmentUpsertRequest extends FormRequest
   public function rules(): array
   {
     return [
-      "title" => "required|string|max:50",
-      "address" => "required|string",
-      "price" => "required|integer",
-      'images' => 'required|array',
-      "description" => "required|string|max:500",
-      "rooms_num" => "required|integer",
-      "beds_num" => "required|integer",
-      "bathroom_num" => "required|integer",
-      "visibility" => "required|boolean",
-      "square_meters" => "required|integer",
-      "amenity" => "required|array"
+      "title" => "nullable|string|max:50",
+      "address" => "nullable",
+      "price" => "nullable|integer",
+      'images' => 'nullable|array',
+      "description" => "nullable|string|max:500",
+      "rooms_num" => "nullable|integer",
+      "beds_num" => "nullable|integer",
+      "bathroom_num" => "nullable|integer",
+      "visibility" => "nullable|boolean",
+      "square_meters" => "nullable|integer",
+      "amenity" => "nullable|array"
     ];
   }
    // "images" => "required|image|max:10240",
