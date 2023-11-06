@@ -17,7 +17,9 @@ body {
 a {
     text-decoration: none;
 }
-
+.input-none{
+    display: none;
+}
 .container{
    
     display: flex;

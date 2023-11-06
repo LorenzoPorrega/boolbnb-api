@@ -16,7 +16,7 @@
     <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.1.2-public-preview.15/services/services-web.min.js">
     </script>
 
-    @vite(['resources/scss/style.css', 'resources/js/stores.js'])
+    @vite(['resources/scss/style.css'])
 
 </head>
 

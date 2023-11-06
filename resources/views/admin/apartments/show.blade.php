@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    @vite(['resources/scss/style.css', 'resources/js/stores.js'])
+    @vite(['resources/scss/style.css'])
     <div class="container">
         <h1>Edit Post</h1>
         {{-- @dd($apartment) --}}
@@ -12,10 +12,10 @@
             <li><input type="text" id="address" value=""></li>
         </ul> --}}
         <h5>{{ $apartment->address }}
-            <input type="text" value="{{ $apartment->address }}" id="via">
+            <input class="input-none" type="text" value="{{ $apartment->address }}" id="via">
         </h5>
-        <input type="text"value="{{ $apartment->latitude }}" id="latitude">
-        <input type="text" value="{{ $apartment->longitude }}" id="longitude">
+        <input class="input-none" type="text"value="{{ $apartment->latitude }}" id="latitude" >
+        <input class="input-none" type="text" value="{{ $apartment->longitude }}" id="longitude">
     </div>
     <div class="container">
         <div class='control-panel' style="display: none">
@@ -26,9 +26,9 @@
         </div>
         <div class='map' id='map'></div>
     </div>
+
     <script>
-        < script >
-            const via = document.getElementById("via").value
+        const via = document.getElementById("via").value
         const latitude = document.getElementById("latitude").value
         const longitude = document.getElementById("longitude").value
         let stores = {
@@ -56,7 +56,7 @@
             const map = tt.map({
                 key: '9GGMAIWofgnTAUXbZTCGx0V0SDSxAx9I',
                 container: 'map',
-                center: [13.208185, 43.711744],
+                center: [longitude, latitude],
                 zoom: 10
             });
 
@@ -196,6 +196,5 @@
         }
         console.log(via.value)
         createmap()
-    </>
     </script>
 @endsection
