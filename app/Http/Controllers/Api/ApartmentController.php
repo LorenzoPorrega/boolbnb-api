@@ -12,7 +12,9 @@ class ApartmentController extends Controller
     public function index()
     {
         // recupero dati dal db
-        $apartments = Apartment::all();
+        // $apartments = Apartment::all();
+        $query = Apartment::with(['amenities']);
+        $apartments = $query->paginate();
 
         // restituisco in formato JSON
         return response()->json(['results' => $apartments]);

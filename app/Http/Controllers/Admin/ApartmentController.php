@@ -88,8 +88,9 @@ class ApartmentController extends Controller
   {
 
     // Data is validate in the ApartmentUpsertRequest's rules
-
+    // @dd($request);
     $data = $request->validated();
+    
     $addressObject = json_decode($data["address"]);
     //converto l'indirizzo da stringa a oggetto
     $indirizzo = $addressObject->data->text;
@@ -201,7 +202,7 @@ class ApartmentController extends Controller
     }
     $apartment->amenities()->sync($data["amenity"]);
     $apartment->update($data);
-    return redirect()->route('admin.apartments.index');
+    return redirect()->route("admin.apartments.index");
   }
 
   /**

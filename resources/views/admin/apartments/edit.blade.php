@@ -27,9 +27,9 @@
                             <span
                                 class="text-danger d-block px-1 mb-2 bg-danger-subtle rounded-2 border-danger">{{ $message }}</span>
                         @enderror
-                        <div>
-                            <input type="text" class="form-control" value="{{ old('address', $apartment[0]->address) }}"
-                                name="address">
+                        <div id="input">
+                            <input type="text" class="form-control" value="{{ old('address') }}"
+                                name="address" style="display: none" id="address">
                         </div>
                     </div>
 
