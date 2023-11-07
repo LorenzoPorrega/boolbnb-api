@@ -148,9 +148,9 @@ class ApartmentController extends Controller
    */
   public function edit($slug){
     // Istanzio un apartment come classe in base allo slug che passiamo nel bottone edit in index
-    $apartment = Apartment::where("slug", $slug)->get();
+    $apartment = Apartment::where("slug", $slug)->firstOrFail();
     
-    if($apartment[0]->user_id != Auth::id()){ 
+    if($apartment->user_id != Auth::id()){ 
       return abort(404);
     }
 
@@ -181,7 +181,7 @@ class ApartmentController extends Controller
   public function update(ApartmentUpsertRequest $request, $id)
   {
     //
-
+    dd();
     $apartment = Apartment::findOrFail($id);
     $data = $request->validated();
     if (isset($data['images'])) {
