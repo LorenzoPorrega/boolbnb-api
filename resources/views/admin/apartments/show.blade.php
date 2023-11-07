@@ -20,6 +20,10 @@
                                 <h5><strong>Indirizzo: </strong>{{ $apartment->address }}
                                     <input class="input-none" type="text" value="{{ $apartment->address }}" id="via">
                                 </h5>
+                               <h5> <strong>Servizi:</strong></h5>
+                                @foreach ($apartment->amenities as $amenitie )
+                                <span>{{$amenitie->name}}</span>
+                                @endforeach
                                 <input class="input-none" type="text"value="{{ $apartment->latitude }}" id="latitude">
                                 <input class="input-none" type="text" value="{{ $apartment->longitude }}"
                                     id="longitude">
