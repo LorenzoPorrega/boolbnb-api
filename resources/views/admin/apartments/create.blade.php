@@ -9,110 +9,101 @@
                     {{-- title --}}
                     <div class="mb-3">
                         <label class="form-label fw-bold fs-5">Title</label>
-                        <div class="title-error d-none">
-                          <span class="text-white bg-danger p-1">Inserisci il titolo</span>
-                        </div>
-                        @error('title')
+                        <small class="text-white title-error d-none bg-danger p-1 rounded-2">Fill this field</small>
+                        {{-- @error('title')
                             <p class="text-danger d-block px-1 mb-2 bg-danger-subtle rounded-2 border-danger">{{ $message }}</p>
-                        @enderror
+                        @enderror --}}
                         <div>
-                            <input type="text" class="form-control" value="{{ old('title') }}" name="title" required>
+                            <input type="text" class="form-control" value="{{ old('title') }}" id="title" name="title" required
+                            oninput="validateInputs('title', 'title-error')">
                         </div>
                     </div>
 
                     {{-- address --}}
                     <div class="mb-3">
                         <label class="form-label fw-bold fs-5">Address</label>
-                        <div class="address-error d-none">
-                          <span class="text-white bg-danger p-1">Inserisci l'indirizzo</span>
-                        </div>
-                        @error('address')
+                        <small class="text-white address-error d-none bg-danger p-1 rounded-2">Fill this field</small>
+                        {{-- @error('address')
                             <p class="text-danger d-block px-1 mb-2 bg-danger-subtle rounded-2 border-danger">{{ $message }}</p>
-                        @enderror
-                        <div>
-                            <input type="text" class="form-control" value="{{ old('address') }}" name="address" required>
+                        @enderror --}}
+                        <div id="input">
+                            <input type="text" class="form-control d-none" value="{{ old('address') }}" id="address" name="address" required>
                         </div>
                     </div>
 
                     {{-- price --}}
                     <div class="mb-3">
                         <label class="form-label fw-bold fs-5">Daily stay price</label>
-                        <div class="price-error d-none">
-                          <span class="text-white bg-danger p-1">Inserisci il prezzo</span>
-                        </div>
-                        @error('price')
+                        <small class="text-white price-error d-none bg-danger p-1 rounded-2">Fill this field</small>
+                        {{-- @error('price')
                             <p class="text-danger d-block px-1 mb-2 bg-danger-subtle rounded-2 border-danger">{{ $message }}</p>
-                        @enderror
+                        @enderror --}}
                         <div>
-                            <input type="text" class="form-control" value="{{ old('price') }}" name="price" required>
+                            <input type="text" class="form-control" value="{{ old('price') }}" id="price" name="price" required
+                            oninput="validateInputs('price', 'price-error')">
                         </div>
                     </div>
 
                     {{-- image --}}
                     <div class="mb-3">
                         <label class="form-label fw-bold fs-5">Images</label>
-                        <div class="image-error d-none">
-                          <span class="text-white bg-danger p-1">Inserisci almeno un'immagine</span>
-                        </div>
+                        <small class="text-white image-error d-none bg-danger p-1 rounded-2">Fill this field</small>
                         @error('images')
                             <p class="text-danger d-block px-1 mb-2 bg-danger-subtle rounded-2 border-danger">{{ $message }}</p>
                         @enderror
-                        <input type="file" accept="image/*" class="form-control" name="images[]" multiple="multiple" required>
+                        <input type="file" accept="image/*" class="form-control" id="images" name="images[]" multiple="multiple" required
+                        oninput="validateInputs('images', 'image-error')">
                     </div>
 
                     {{-- description --}}
                     <div class="mb-3">
                         <label class="form-label fw-bold fs-5">Description</label>
-                        <div class="description-error d-none">
-                          <span class="text-white bg-danger p-1">Inserisci una descrizione</span>
-                        </div>
-                        @error('description')
+                        <small class="text-white description-error d-none bg-danger p-1 rounded-2">Fill this field</small>
+                        {{-- @error('description')
                             <p class="text-danger d-block px-1 mb-2 bg-danger-subtle rounded-2 border-danger">{{ $message }}</p>
-                        @enderror
+                        @enderror --}}
                         <div>
-                            <textarea class="form-control" style="height: 150px;" name="description">{{ old('description') }}</textarea>
+                          <textarea class="form-control" style="height: 150px;" id="description" name="description" required
+                          oninput="validateInputs('description', 'description-error')">{{ old('description') }}</textarea>
                         </div>
                     </div>
 
                     {{-- rooms number --}}
                     <div class="mb-3">
                         <label class="form-label fw-bold fs-5">Rooms Number</label>
-                        <div class="rooms-error d-none">
-                          <span class="text-white bg-danger p-1">Inserisci il numero di stanze</span>
-                        </div>
+                        <small class="text-white rooms-error d-none bg-danger p-1 rounded-2">Fill this field</small>
                         @error('rooms_num')
                             <p class="text-danger d-block px-1 mb-2 bg-danger-subtle rounded-2 border-danger">{{ $message }}</p>
                         @enderror
                         <div>
-                            <input type="text" class="form-control" value="{{ old('rooms_num') }}" name="rooms_num" required>
+                            <input type="text" class="form-control" value="{{ old('rooms_num') }}" id="rooms_num" name="rooms_num" required
+                            oninput="validateInputs('rooms_num', 'rooms-error')">
                         </div>
                     </div>
 
                     {{-- beds number --}}
                     <div class="mb-3">
                         <label class="form-label fw-bold fs-5">Beds Number</label>
-                        <div class="beds-error d-none">
-                          <span class="text-white bg-danger p-1">Inserisci il numero di letti disponibili</span>
-                        </div>
+                        <small class="text-white beds-error d-none bg-danger p-1 rounded-2">Fill this field</small>
                         @error('beds_num')
                             <p class="text-danger d-block px-1 mb-2 bg-danger-subtle rounded-2 border-danger">{{ $message }}</p>
                         @enderror
                         <div>
-                            <input type="text" class="form-control" value="{{ old('beds_num') }}" name="beds_num" required>
+                            <input type="text" class="form-control" value="{{ old('beds_num') }}" id="beds_num" name="beds_num" required
+                            oninput="validateInputs('beds_num', 'beds-error')">
                         </div>
                     </div>
 
                     {{-- bathrooms number --}}
                     <div class="mb-3">
                         <label class="form-label fw-bold fs-5">Bathrooms Number</label>
-                        <div class="baths-error d-none">
-                          <span class="text-white bg-danger p-1">Inserisci il numero di bagni disponibili</span>
-                        </div>
+                        <small class="text-white baths-error d-none bg-danger p-1 rounded-2">Fill this field</small>
                         @error('bathroom_num')
                             <p class="text-danger d-block px-1 mb-2 bg-danger-subtle rounded-2 border-danger">{{ $message }}</p>
                         @enderror
                         <div>
-                            <input type="text" class="form-control" value="{{ old('bathroom_num') }}" name="bathroom_num" required>
+                            <input type="text" class="form-control" value="{{ old('bathroom_num') }}" id="bathroom_num" name="bathroom_num" required
+                            oninput="validateInputs('bathroom_num', 'baths-error')">
                         </div>
                     </div>
 
@@ -132,14 +123,13 @@
                     {{-- square meters --}}
                     <div class="mb-3">
                         <label class="form-label fw-bold fs-5">Square Meters</label>
-                        <div class="sqMeters-error d-none">
-                          <span class="text-white bg-danger p-1">Inserisci il numero di metri quadrati della struttura</span>
-                        </div>
+                        <small class="text-white sqMeters-error d-none bg-danger p-1 rounded-2">Fill this field</small>
                         @error('square_meters')
                             <p class="text-danger d-block px-1 mb-2 bg-danger-subtle rounded-2 border-danger">{{ $message }}</p>
                         @enderror
                         <div>
-                            <input type="text" class="form-control" value="{{ old('square_meters') }}" name="square_meters" required />
+                            <input type="text" class="form-control" value="{{ old('square_meters') }}" id="square_meters" name="square_meters" required
+                            oninput="validateInputs('square_meters', 'sqMeters-error')"/>
                         </div>
                     </div>
 
@@ -147,7 +137,8 @@
                     <div class="mb-3">
                         <label class="form-label fw-bold fs-5">Amenities</label>
                         @if ($errors->has('amenity'))
-                            <p class="text-danger d-block px-1 mb-2 bg-danger-subtle rounded-2 border-danger">{{ $errors->first('amenity') }}</p>
+                          {{-- <small class="text-danger d-block px-1 mb-2 bg-danger-subtle rounded-2 border-danger">{{ $errors->first('amenity') }}</small> --}}
+                          <small class="text-white bg-danger p-1 rounded-2">Select at least one amenity.</small>
                         @endif
                         <div class="row d-flex">
                             @php $counter = 1; @endphp
@@ -179,25 +170,41 @@
                                 </div>
                                 @php $counter++; @endphp
                             @endforeach
-                            <div class="missing-amenities mt-3 d-flex justify-content-center d-none">
-                                <span class="text-white bg-danger p-1">Seleziona almeno un servizio</span>
-                            </div>
-                        </div>
+                        </div> 
                     </div>
 
                     <div class="w-100 text-center">
                         <a class="btn btn-secondary" href="{{ route('admin.apartments.index') }}">Cancel</a>
-                        <button class="btn btn-primary" type="button" id="save-button">Save</button>
+                        <button class="btn btn-primary" type="submit" id="save-button"
+                        onsubmit="">Save</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
     <script>
-        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-        const saveButton = document.getElementById('save-button');
+        /* const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        const saveButton = document.getElementById('save-button'); */
+        
 
-        saveButton.addEventListener('click', function () {
+        function validateInputs(id, errorSpan) {
+          const input = document.getElementById(id);
+          console.log(id);
+          let errorSpanElement = document.querySelector(`.${errorSpan}`);
+          if (!input.value) {
+              if (errorSpanElement) {
+                  input.classList.add("bg-danger-subtle")
+                  errorSpanElement.classList.replace("d-none", "d-inline");
+              }
+          } else {
+              if (errorSpanElement) {
+                input.classList.remove("bg-danger-subtle")
+                  errorSpanElement.classList.replace("d-inline", "d-none");
+              }
+          }
+        }
+
+        /* saveButton.addEventListener('click', function () {
             const selectedCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
             const validateTitle = document.querySelector('input[name="title"]')
             
@@ -251,6 +258,6 @@
             //     }
             //     document.getElementById('myForm').submit();
             // }
-        });
+        }); */
     </script>
 @endsection
