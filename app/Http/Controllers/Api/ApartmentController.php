@@ -9,13 +9,33 @@ use Illuminate\Http\Request;
 class ApartmentController extends Controller
 {
     //
-    public function index()
+    public function index(Request $request)
     {
-        // recupero dati dal db
-        $apartments = Apartment::all();
+         // recupero dati dal db
+         $apartmentsQuery = Apartment::query();
+
+         $rooms_num = $request->input('rooms_num');
+         $beds_numFilter = $request->input('beds_num');
+         $bathroom_numFilter = $request->input('bath_num');
+         
+         if (!empty($rooms_num)) {
+             $apartmentsQuery->where('rooms_num', "like", $rooms_num);
+         }
+         
+         if (!empty($beds_numFilter)) {
+             $apartmentsQuery->where('beds_num', "like", $beds_numFilter);
+         }
+         
+         if (!empty($bathroom_numFilter)) {
+             $apartmentsQuery->where('bathroom_num', "like", $bathroom_numFilter);
+         }
+         
+         $filteredApartments = $apartmentsQuery->get();
+
+
 
         // restituisco in formato JSON
-        return response()->json(['results' => $apartments]);
+        return response()->json(['apartments' => $filteredApartments]);
     }
 
     public function getPositions()
@@ -49,4 +69,5 @@ class ApartmentController extends Controller
         //restituisco i dati degli indirizzi di tutti gli abitazioni senza controllo dell utente
         return response()->json(['data' => $data]);
     }
+
 }
