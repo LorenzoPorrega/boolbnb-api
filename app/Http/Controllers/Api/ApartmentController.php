@@ -38,6 +38,18 @@ class ApartmentController extends Controller
         return response()->json(['apartments' => $filteredApartments]);
     }
 
+    public function show($slug){
+        $showedApartmentQuery = Apartment::query();
+
+        /* $selectedApartmentSlug = $request->input("selectedApartmentSlug"); */
+
+        $showedApartmentQuery->where("slug", $slug);
+
+        $showedApartment = $showedApartmentQuery->get();
+
+        return response()->json(['singleApartment' => $showedApartment]);
+    }
+
     public function getPositions()
     {
         $apartments = Apartment::all();
