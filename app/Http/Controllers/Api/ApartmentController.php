@@ -73,10 +73,11 @@ class ApartmentController extends Controller
 
     public function filter($request)
     {
-        $query = $request;
+        $query =json_decode($request,true);
+        $citta = $query["address"]["municipality"];
         $data=  DB::table('apartments')
-            ->where('address', 'LIKE', "%{$query}%")
-            ->get();
+             ->where('address', 'LIKE', "%{$citta}%")
+             ->get();
         return response()->json(['data' => $data]);
     }
 }
