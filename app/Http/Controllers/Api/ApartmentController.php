@@ -13,7 +13,7 @@ class ApartmentController extends Controller
     //
     static $latitude = '';
     static $longitude = '';
-
+//funzione aritmetica, molto interessante ma non funzionante
     public static function pointsWithinRadius($latitude, $longitude, $radius)
     {
         $presetRadius = 20;
@@ -33,11 +33,26 @@ class ApartmentController extends Controller
 
         return $results;
     }
+    //funzione semplice che converte correttamente il valore del raggio e filtra 
+    //la tabella appartamenti e prende tutti dentro il raggio dato 
+    public static function getDataWithinRadius($latitude, $longitude, $radius)
+    {
+        // Convert radius from kilometers to meters
+        $radiusMeters = $radius * 1000;
 
-    
+        // Define the SQL query to retrieve data within the radius
+        $query = "SELECT * FROM apartments
+                  WHERE ST_Distance_Sphere(point(latitude, longitude), point(?, ?)) <= ?";
+
+        // Execute the query with the given parameters
+        $data = DB::select($query, [$latitude, $longitude, $radiusMeters]);
+
+        return $data;
+    }
+
+
     public function index(Request $request)
     {
-
 
 
         $rooms_num = $request->input('rooms_num');
@@ -47,6 +62,7 @@ class ApartmentController extends Controller
         // $position = $request->input('position');
         $longitude =  $request->input('longitude');
         $latitude =  $request->input('latitude');
+        $raggio = $request->input('distance');
 
         // Start with the base query
         $apartmentsQuery = Apartment::query();
@@ -64,8 +80,9 @@ class ApartmentController extends Controller
             $apartmentsQuery->where('bathroom_num', "like", $bathroom_numFilter);
         }
         if ($latitude !== '') {
-            $raggio = 2;
-            $risultati = ApartmentController::pointsWithinRadius($latitude,$longitude,$raggio);
+            // $raggio = 80;
+            //$risultati = ApartmentController::pointsWithinRadius($latitude, $longitude, $raggio);
+            $risultati = ApartmentController::getDataWithinRadius($latitude, $longitude, $raggio);
         }
         // Additional filter based on municipality
         // if (!empty($freeformAddress)) {
@@ -73,8 +90,8 @@ class ApartmentController extends Controller
         // }
 
         $filteredApartments = $apartmentsQuery->get();
-
-        return response()->json(['apartments' => $filteredApartments, 'dati' => $latitude, 'funzione' => $risultati]);
+            //solo per fini di Dev restituisco gli appartamenti totali e anche quelli filtrati con anche il raggio schelto.
+        return response()->json(['apartments' => $filteredApartments, 'dati' => $latitude, 'funzione' => $risultati,'raggio'=>$raggio]);
     }
 
     public function show($slug)
