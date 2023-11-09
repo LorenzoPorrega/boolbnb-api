@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\DB;
 class ApartmentController extends Controller
 {
     //
+    static $latitude = '';
+    static $longitude = '';
 
     public static function pointsWithinRadius($latitude, $longitude, $radius)
     {
@@ -32,9 +34,12 @@ class ApartmentController extends Controller
         return $results;
     }
 
-
+    
     public function index(Request $request)
     {
+
+
+
         $rooms_num = $request->input('rooms_num');
         $beds_numFilter = $request->input('beds_num');
         $bathroom_numFilter = $request->input('bath_num');
@@ -58,21 +63,18 @@ class ApartmentController extends Controller
         if (!empty($bathroom_numFilter)) {
             $apartmentsQuery->where('bathroom_num', "like", $bathroom_numFilter);
         }
-
+        if ($latitude !== '') {
+            $raggio = 2;
+            $risultati = ApartmentController::pointsWithinRadius($latitude,$longitude,$raggio);
+        }
         // Additional filter based on municipality
         // if (!empty($freeformAddress)) {
         //     $apartmentsQuery->where('address', 'LIKE', '%' . $freeformAddress . '%');
         // }
-        if (!empty($latitude)) {
-            // richiamo della function static
-             //$risultati= self::pointsWithinRadius($longitude,$latitude, 20);
-            //@dump(self::pointsWithinRadius($position['lng'], $position['lat'], 20));
-            $risultati= ApartmentController::pointsWithinRadius($latitude, $longitude, 1);
-        }
 
         $filteredApartments = $apartmentsQuery->get();
 
-        return response()->json(['apartments' => $filteredApartments,'dati'=>$latitude,'funzione'=> $risultati]);
+        return response()->json(['apartments' => $filteredApartments, 'dati' => $latitude, 'funzione' => $risultati]);
     }
 
     public function show($slug)
