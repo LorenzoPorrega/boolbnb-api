@@ -1,9 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
+use App\Models\Apartment;
 use App\Models\Sponsorship;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SponsorshipController extends Controller
 {
@@ -34,9 +37,16 @@ class SponsorshipController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Sponsorship $sponsorship)
+    public function show($slug)
     {
-        //
+        $apartment = Apartment::where('slug', $slug)->firstOrFail();
+        $sponsorships = Sponsorship::all();
+
+        if ($apartment->user_id != Auth::id()) {
+            return abort(404);
+        }
+
+        return view('admin.sponsorships.sponsorship', ['apartment'=> $apartment, 'sponsorships' => $sponsorships]);
     }
 
     /**
