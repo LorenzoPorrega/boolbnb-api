@@ -62,7 +62,6 @@ class ApartmentController extends Controller
         if (!empty($position)) {
             // richiamo della function static
             self::pointsWithinRadius($position['lng'], $position['lat'], 20);
-            @dump(self::pointsWithinRadius($position['lng'], $position['lat'], 20));
         }
 
         $filteredApartments = $apartmentsQuery->get();
