@@ -6,7 +6,7 @@
                 <option selected>Choose your sponsorship</option>
                  @foreach ($sponsorships as $singleSponsorship)
                      
-                 <option value="{{ $singleSponsorship->id }}"> {{ $singleSponsorship->price}} € - {{ $singleSponsorship->duration_hours}} ore di durata</option>
+                 <option value="{{ $singleSponsorship->id }}"> {{ $singleSponsorship->price}} € - {{ $singleSponsorship->duration_hours}} hours of sponsor</option>
                  @endforeach
 
               </select>
