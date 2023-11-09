@@ -11,33 +11,38 @@ class ApartmentController extends Controller
 {
     //
     public function index(Request $request)
-    {
-        // recupero dati dal db
-        $apartmentsQuery = Apartment::query();
+{
+    $rooms_num = $request->input('rooms_num');
+    $beds_numFilter = $request->input('beds_num');
+    $bathroom_numFilter = $request->input('bath_num');
+    $freeformAddress = $request->input('freeformAddress');
+    $position = $request->input('position');
 
-        $rooms_num = $request->input('rooms_num');
-        $beds_numFilter = $request->input('beds_num');
-        $bathroom_numFilter = $request->input('bath_num');
+    // Start with the base query
+    $apartmentsQuery = Apartment::query();
 
-        if (!empty($rooms_num)) {
-            $apartmentsQuery->where('rooms_num', "like", $rooms_num);
-        }
-
-        if (!empty($beds_numFilter)) {
-            $apartmentsQuery->where('beds_num', "like", $beds_numFilter);
-        }
-
-        if (!empty($bathroom_numFilter)) {
-            $apartmentsQuery->where('bathroom_num', "like", $bathroom_numFilter);
-        }
-
-        $filteredApartments = $apartmentsQuery->get();
-
-
-
-        // restituisco in formato JSON
-        return response()->json(['apartments' => $filteredApartments]);
+    // Apply filters based on request parameters
+    if (!empty($rooms_num)) {
+        $apartmentsQuery->where('rooms_num', "like", $rooms_num);
     }
+
+    if (!empty($beds_numFilter)) {
+        $apartmentsQuery->where('beds_num', "like", $beds_numFilter);
+    }
+
+    if (!empty($bathroom_numFilter)) {
+        $apartmentsQuery->where('bathroom_num', "like", $bathroom_numFilter);
+    }
+
+    // Additional filter based on municipality
+    if (!empty($freeformAddress)) {
+        $apartmentsQuery->where('address', 'LIKE', '%' . $freeformAddress . '%');
+    }
+
+    $filteredApartments = $apartmentsQuery->get();
+
+    return response()->json(['apartments' => $filteredApartments]);
+}
 
     public function getPositions()
     {
