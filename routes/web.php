@@ -45,7 +45,9 @@ Route::middleware('auth')
         Route::resource('apartments', ApartmentController::class);
 
         // sezione sponsorship
-        Route::get("/sponsorship/{slug}", [SponsorshipController::class, 'show'])->name('show');
+        Route::get("/sponsorship/{slug}", [SponsorshipController::class, 'show'])->name('sponsorship.show');
+        Route::resource('sponsorship', ApartmentController::class);
+        Route::post('/sponsorship/sponsored', [SponsorshipController::class, "sponsored"])->name('sponsorship.sponsored');
 });
 Route::get('example', function () {
     return view('example');

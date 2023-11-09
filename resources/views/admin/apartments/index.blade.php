@@ -30,7 +30,7 @@
                     <a href="{{ route('admin.apartments.show', $apartment->slug) }}"><button type="submit"
                             class="btn btn-primary">Show</button></a>
                     {{-- sponsorship button --}}
-                    <a href="{{ route('admin.show', $apartment->slug) }}">
+                    <a href="{{ route('admin.sponsorship.show', $apartment->slug) }}">
                         <button type="submit" class="btn btn-warning">Sponsor</button>
                     </a>
                     {{-- edit button --}}

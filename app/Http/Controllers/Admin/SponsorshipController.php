@@ -31,7 +31,9 @@ class SponsorshipController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $dataRaw = $request;
+        $data = $dataRaw;
+        return redirect()->route("admin.apartments.index");
     }
 
     /**
@@ -47,6 +49,25 @@ class SponsorshipController extends Controller
         }
 
         return view('admin.sponsorships.sponsorship', ['apartment'=> $apartment, 'sponsorships' => $sponsorships]);
+    }
+
+    public function sponsored(Request $request){
+        $apartmentId = $request->input('apartment_id');
+        $sponsorshipId = $request->input('sponsorship_id');
+
+        $apartment = Apartment::find($apartmentId);
+        $sponsorship = Sponsorship::find($sponsorshipId);
+
+        if ($apartment && $sponsorship) {
+            $apartment->sponsorships()->attach($sponsorship->id, 
+            [
+                'start_time' => now(),
+                'end_time' => now()->addHours($sponsorship->duration_hours)
+            ]);
+        } else {
+            return abort(404);
+        }
+        return view('admin.sponsorships.sponsored');
     }
 
     /**
