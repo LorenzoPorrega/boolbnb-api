@@ -11,6 +11,25 @@ use Illuminate\Support\Facades\DB;
 class ApartmentController extends Controller
 {
     //
+    public static function pointsWithinRadius($latitude, $longitude, $radius)
+    {
+        $presetRadius = 20;
+        
+        $lat1 = deg2rad($latitude);
+        $lon1 = deg2rad($longitude);
+        
+        $results = Apartment::selectRaw("*,
+            ($presetRadius * ACOS(
+                COS(RADIANS(latitude)) * COS($lat1) * COS(RADIANS(longitude) - $lon1) +
+                SIN(RADIANS(latitude)) * SIN($lat1)
+            )) AS distance"
+        )
+        ->having('distance', '<', $radius)
+        ->get();
+
+        return $results;
+    }
+
     public function index(Request $request)
     {
         $rooms_num = $request->input('rooms_num');
@@ -36,8 +55,14 @@ class ApartmentController extends Controller
         }
 
         // Additional filter based on municipality
-        if (!empty($freeformAddress)) {
-            $apartmentsQuery->where('address', 'LIKE', '%' . $freeformAddress . '%');
+        // if (!empty($freeformAddress)) {
+        //     $apartmentsQuery->where('address', 'LIKE', '%' . $freeformAddress . '%');
+        // }
+
+        if (!empty($position)) {
+            // richiamo della function static
+            self::pointsWithinRadius($position['lng'], $position['lat'], 20);
+            @dump(self::pointsWithinRadius($position['lng'], $position['lat'], 20));
         }
 
         $filteredApartments = $apartmentsQuery->get();
@@ -89,7 +114,7 @@ class ApartmentController extends Controller
         return response()->json(['data' => $data]);
     }
 
-   /*  public function filter($request)
+    /*  public function filter($request)
     {
         $query = json_decode($request, true);
         $citta = $query["address"]["municipality"];
