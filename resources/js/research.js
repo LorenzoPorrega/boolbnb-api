@@ -12,7 +12,7 @@ var options = {
 var ttSearchBox = new tt.plugins.SearchBox(tt.services, options)
 var searchBoxHTML = ttSearchBox.getSearchBoxHTML()
 const input = document.getElementById('input')
-searchBoxHTML.classList.add("form-control");
+searchBoxHTML.classList.add("form-control","m-0", "border-0", "p-0");
 
 
 input.append(searchBoxHTML);
