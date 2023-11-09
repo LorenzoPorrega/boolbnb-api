@@ -20,7 +20,7 @@
                                 <h5><strong>Indirizzo: </strong>{{ $apartment->address }}
                                     <input class="input-none" type="text" value="{{ $apartment->address }}" id="via">
                                 </h5>
-                               <h5> <strong>Servizi:</strong></h5>
+                                <h5> <strong>Servizi:</strong></h5>
                                 @foreach ($apartment->amenities as $amenitie )
                                 <span>{{$amenitie->name}}</span>
                                 @endforeach
@@ -30,9 +30,9 @@
 
                                 <div class="container-map position-relative">
                                     <div class='control-panel' style="display: none">
-                                        <div class='heading'>
-                                            <img src='img/logo.png'>
-                                        </div>
+                                        {{-- <div class='heading'>
+                                            <img src='/images/boolbnb-logo-2.png'>
+                                        </div> --}}
                                         <div id='store-list'></div>
                                     </div>
                                     <div class='map' id='map'></div>

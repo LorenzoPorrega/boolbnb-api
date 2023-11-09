@@ -5,7 +5,7 @@
             <div class="col-8">
                 <form action="{{ route('admin.apartments.update', $apartment->id) }}" method="POST"
                     enctype="multipart/form-data">
-                    @dump($apartment)
+                    {{-- @dump($apartment) --}}
                     @csrf()
                     @method('put')
                     {{-- title --}}
