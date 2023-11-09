@@ -11,6 +11,28 @@ use Illuminate\Support\Facades\DB;
 class ApartmentController extends Controller
 {
     //
+
+    public static function pointsWithinRadius($latitude, $longitude, $radius)
+    {
+        $presetRadius = 20;
+
+        $lat1 = deg2rad($latitude);
+        $lon1 = deg2rad($longitude);
+
+        $results = Apartment::selectRaw(
+            "*,
+            ($presetRadius * ACOS(
+                COS(RADIANS(latitude)) * COS($lat1) * COS(RADIANS(longitude) - $lon1) +
+                SIN(RADIANS(latitude)) * SIN($lat1)
+            )) AS distance"
+        )
+            ->having('distance', '<', $radius)
+            ->get();
+
+        return $results;
+    }
+
+
     public function index(Request $request)
     {
         $rooms_num = $request->input('rooms_num');
@@ -18,8 +40,8 @@ class ApartmentController extends Controller
         $bathroom_numFilter = $request->input('bath_num');
         $freeformAddress = $request->input('freeformAddress');
         // $position = $request->input('position');
-        $latitude=  $request->input('longitude');
-        $latitude=  $request->input('latitude');
+        $longitude =  $request->input('longitude');
+        $latitude =  $request->input('latitude');
 
         // Start with the base query
         $apartmentsQuery = Apartment::query();
@@ -38,16 +60,23 @@ class ApartmentController extends Controller
         }
 
         // Additional filter based on municipality
-        if (!empty($freeformAddress)) {
-            $apartmentsQuery->where('address', 'LIKE', '%' . $freeformAddress . '%');
+        // if (!empty($freeformAddress)) {
+        //     $apartmentsQuery->where('address', 'LIKE', '%' . $freeformAddress . '%');
+        // }
+        if (!empty($latitude)) {
+            // richiamo della function static
+             //$risultati= self::pointsWithinRadius($longitude,$latitude, 20);
+            //@dump(self::pointsWithinRadius($position['lng'], $position['lat'], 20));
+            $risultati= ApartmentController::pointsWithinRadius($latitude, $longitude, 1);
         }
 
         $filteredApartments = $apartmentsQuery->get();
 
-        return response()->json(['apartments' => $filteredApartments]);
+        return response()->json(['apartments' => $filteredApartments,'dati'=>$latitude,'funzione'=> $risultati]);
     }
 
-    public function show($slug){
+    public function show($slug)
+    {
         $showedApartmentQuery = Apartment::query();
 
         /* $selectedApartmentSlug = $request->input("selectedApartmentSlug"); */
@@ -91,7 +120,7 @@ class ApartmentController extends Controller
         return response()->json(['data' => $data]);
     }
 
-   /*  public function filter($request)
+    /*  public function filter($request)
     {
         $query = json_decode($request, true);
         $citta = $query["address"]["municipality"];
@@ -100,22 +129,23 @@ class ApartmentController extends Controller
             ->get();
         return response()->json(['data' => $data]);
     } */
-    public function postPosition(Request $request){
-        $latitude=  $request->input('longitude');
-        $latitude=  $request->input('latitude');
-        $dati =[
-            "longitude"=>$latitude,
-            "latitude"=>$latitude
+    public function postPosition(Request $request)
+    {
+        $latitude =  $request->input('longitude');
+        $latitude =  $request->input('latitude');
+        $dati = [
+            "longitude" => $latitude,
+            "latitude" => $latitude
         ];
         //$data = preg_match_all('/(\w+)="([^"]+)"/', $request, $matches);
         // $data = 'ciao';
-        
+
         //$data ='{"lng":"12.492395","lat" :"41.889429"}';
         //preg_match_all('/(\w+)="([^"]+)"/', $request, $matches);
         //$arraynuovo = preg_match_all('/(\w+)="([^"]+)"/', $request, $matches);
         //$array = json_decode($request,true);
         //dd($arraynuovo);
-    
+
         return response()->json(['data' => $dati]);
     }
 }
