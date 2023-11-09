@@ -17,7 +17,9 @@ class ApartmentController extends Controller
         $beds_numFilter = $request->input('beds_num');
         $bathroom_numFilter = $request->input('bath_num');
         $freeformAddress = $request->input('freeformAddress');
-        $position = $request->input('position');
+        // $position = $request->input('position');
+        $latitude=  $request->input('longitude');
+        $latitude=  $request->input('latitude');
 
         // Start with the base query
         $apartmentsQuery = Apartment::query();
@@ -98,4 +100,22 @@ class ApartmentController extends Controller
             ->get();
         return response()->json(['data' => $data]);
     } */
+    public function postPosition(Request $request){
+        $latitude=  $request->input('longitude');
+        $latitude=  $request->input('latitude');
+        $dati =[
+            "longitude"=>$latitude,
+            "latitude"=>$latitude
+        ];
+        //$data = preg_match_all('/(\w+)="([^"]+)"/', $request, $matches);
+        // $data = 'ciao';
+        
+        //$data ='{"lng":"12.492395","lat" :"41.889429"}';
+        //preg_match_all('/(\w+)="([^"]+)"/', $request, $matches);
+        //$arraynuovo = preg_match_all('/(\w+)="([^"]+)"/', $request, $matches);
+        //$array = json_decode($request,true);
+        //dd($arraynuovo);
+    
+        return response()->json(['data' => $dati]);
+    }
 }
