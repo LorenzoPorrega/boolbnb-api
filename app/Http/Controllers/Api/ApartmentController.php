@@ -45,6 +45,18 @@ class ApartmentController extends Controller
         return response()->json(['apartments' => $filteredApartments]);
     }
 
+    public function show($slug){
+        $showedApartmentQuery = Apartment::query();
+
+        /* $selectedApartmentSlug = $request->input("selectedApartmentSlug"); */
+
+        $showedApartmentQuery->where("slug", $slug);
+
+        $showedApartment = $showedApartmentQuery->get();
+
+        return response()->json(['singleApartment' => $showedApartment]);
+    }
+
     public function getPositions()
     {
         $apartments = Apartment::all();
@@ -77,7 +89,7 @@ class ApartmentController extends Controller
         return response()->json(['data' => $data]);
     }
 
-    public function filter($request)
+   /*  public function filter($request)
     {
         $query = json_decode($request, true);
         $citta = $query["address"]["municipality"];
@@ -85,5 +97,5 @@ class ApartmentController extends Controller
             ->where('address', 'LIKE', "%{$citta}%")
             ->get();
         return response()->json(['data' => $data]);
-    }
+    } */
 }
