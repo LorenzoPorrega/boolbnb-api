@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Apartment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use SebastianBergmann\Type\TrueType;
 
 class ApartmentController extends Controller
 {
@@ -14,18 +15,19 @@ class ApartmentController extends Controller
     public static function pointsWithinRadius($latitude, $longitude, $radius)
     {
         $presetRadius = 20;
-        
+
         $lat1 = deg2rad($latitude);
         $lon1 = deg2rad($longitude);
-        
-        $results = Apartment::selectRaw("*,
+
+        $results = Apartment::selectRaw(
+            "*,
             ($presetRadius * ACOS(
                 COS(RADIANS(latitude)) * COS($lat1) * COS(RADIANS(longitude) - $lon1) +
                 SIN(RADIANS(latitude)) * SIN($lat1)
             )) AS distance"
         )
-        ->having('distance', '<', $radius)
-        ->get();
+            ->having('distance', '<', $radius)
+            ->get();
 
         return $results;
     }
@@ -35,9 +37,10 @@ class ApartmentController extends Controller
         $rooms_num = $request->input('rooms_num');
         $beds_numFilter = $request->input('beds_num');
         $bathroom_numFilter = $request->input('bath_num');
-        $freeformAddress = $request->input('freeformAddress');
-        $position = $request->input('position');
-
+        //$freeformAddress = $request->input('freeformAddress');
+        $position = $request->input('geopoints');
+        $posizione = json_decode($position, true);
+        //dd($posizione);
         // Start with the base query
         $apartmentsQuery = Apartment::query();
 
@@ -59,10 +62,11 @@ class ApartmentController extends Controller
         //     $apartmentsQuery->where('address', 'LIKE', '%' . $freeformAddress . '%');
         // }
 
-        if (!empty($position)) {
+        if (!empty($posizione)) {
             // richiamo della function static
-            self::pointsWithinRadius($position['lng'], $position['lat'], 20);
-            @dump(self::pointsWithinRadius($position['lng'], $position['lat'], 20));
+            $apartmentsQuery = self::pointsWithinRadius($posizione['lng'], $posizione['lat'], 20);
+            //@dd($apartmentsQuery);
+            // @dump(self::pointsWithinRadius($position['lng'], $position['lat'], 20));
         }
 
         $filteredApartments = $apartmentsQuery->get();
@@ -70,7 +74,8 @@ class ApartmentController extends Controller
         return response()->json(['apartments' => $filteredApartments]);
     }
 
-    public function show($slug){
+    public function show($slug)
+    {
         $showedApartmentQuery = Apartment::query();
 
         /* $selectedApartmentSlug = $request->input("selectedApartmentSlug"); */
