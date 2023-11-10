@@ -9,6 +9,12 @@ class Message extends Model
 {
     use HasFactory;
 
+    // protected $fillable = [
+    //     "name",
+    //     "email",
+    //     "message"
+    // ];
+
     // Relazione many-to-one con Apartment
     public function apartment() {
         return $this->belongsTo(Apartment::class);

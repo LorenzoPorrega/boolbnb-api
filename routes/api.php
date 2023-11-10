@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ApartmentController;
+use App\Http\Controllers\Api\MessageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,3 +26,4 @@ Route::get("selected/{slug}", [ApartmentController::class, "show"]);
 Route::get("coordinates", [ApartmentController::class,"getPositions"]);
 Route::get("searchApartament/{query}", [ApartmentController::class,"filter"]);
 Route::get("postPosition/", [ApartmentController::class,"postPosition"]);
+Route::post("apartments/{slug}/messages", [MessageController::class, "store"]);
