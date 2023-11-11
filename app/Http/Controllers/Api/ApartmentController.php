@@ -107,8 +107,7 @@ class ApartmentController extends Controller
         $longitude =  $request->input('longitude');
         $latitude =  $request->input('latitude');
         $raggio = $request->input('distance');
-
-        // Start with the base query
+     
         $apartmentsQuery = Apartment::query();
 
         // Apply filters based on request parameters
@@ -148,8 +147,10 @@ class ApartmentController extends Controller
         return response()->json(['apartments' => $filteredApartments, 'funzione' => $risultati, 'raggio' => $raggio, 'consigliati' => $appartamentiFiltrati]);
     }
 
-    public function show($slug)
+    public function show(Request $request ,$slug)
     {
+        $ip = $request->ip();
+        // Start with the base query
         $showedApartmentQuery = Apartment::query();
 
         /* $selectedApartmentSlug = $request->input("selectedApartmentSlug"); */
@@ -173,7 +174,7 @@ class ApartmentController extends Controller
 
         $showedApartment = $showedApartmentQuery->get();
 
-        return response()->json(['singleApartment' => $showedApartment, 'utente' => $utente]);
+        return response()->json(['singleApartment' => $showedApartment, 'utente' => $utente, 'ip' => $ip]);
     }
 
     public function getPositions()
