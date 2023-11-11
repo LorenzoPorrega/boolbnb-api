@@ -43,8 +43,9 @@ class Apartment extends Model
 
     // Relazione many-to-many con Sponsorship tramite una tabella ponte 'apartment_sponsorship'
     public function sponsorships() {
-        return $this->belongsToMany(Sponsorship::class);
+    return $this->belongsToMany(Sponsorship::class, 'sponsorship_apartment');
     }
+
 
     // Relazione one-to-many con View
     public function views() {
@@ -55,4 +56,9 @@ class Apartment extends Model
     public function messages() {
         return $this->hasMany(Message::class);
     }
+
+    public function isSponsored()
+{
+    return $this->sponsorships()->where('end_time', '>', now())->exists();
+}
 };

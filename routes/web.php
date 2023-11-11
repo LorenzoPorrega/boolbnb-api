@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\ApartmentController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\SponsorshipController;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Route;
 
@@ -42,6 +43,11 @@ Route::middleware('auth')
         Route::get('/apartments/{$slug}', [ApartmentController::class, 'show'])->name('apartments.show');
         Route::get('/apartments/{$slug}/edit', [ApartmentController::class, 'edit'])->name('apartments.edit');
         Route::resource('apartments', ApartmentController::class);
+
+        // sezione sponsorship
+        Route::get("/sponsorship/{slug}", [SponsorshipController::class, 'show'])->name('sponsorship.show');
+        Route::resource('sponsorship', ApartmentController::class);
+        Route::post('/sponsorship/sponsored', [SponsorshipController::class, "sponsored"])->name('sponsorship.sponsored');
 });
 Route::get('example', function () {
     return view('example');
