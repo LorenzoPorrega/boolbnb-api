@@ -62,23 +62,23 @@ class ApartmentController extends Controller
     {
 
         $radiusMeters = $radius * 1000;
-        // $query =" SELECT *
-        // FROM `sponsorship_apartment`
-        // JOIN `sponsorships` ON `sponsorship_apartment`.`sponsorship_id` = `sponsorships`.`id`
-        // RIGHT OUTER JOIN `apartments` ON `sponsorship_apartment`.`apartment_id` = `apartments`.`id`
-        // WHERE ST_Distance_Sphere(point(latitude, longitude), point(?, ?)) <= ?
-        // ORDER BY `sponsorships`.`name` DESC";
-        $data = Apartment::join('sponsorship_apartment', 'sponsorship_apartment.apartment_id', '=', 'apartments.id')
-            ->join('sponsorships', 'sponsorship_apartment.sponsorship_id', '=', 'sponsorships.id')
-            ->whereRaw('ST_Distance_Sphere(point(latitude, longitude), point(?, ?)) <= ?', [$latitude, $longitude, $radiusMeters])
-            ->orderByDesc('sponsorships.name')
-            ->get();
+        $query =" SELECT *
+        FROM `sponsorship_apartment`
+        JOIN `sponsorships` ON `sponsorship_apartment`.`sponsorship_id` = `sponsorships`.`id`
+        RIGHT OUTER JOIN `apartments` ON `sponsorship_apartment`.`apartment_id` = `apartments`.`id`
+        WHERE ST_Distance_Sphere(point(latitude, longitude), point(?, ?)) <= ?
+        ORDER BY `sponsorships`.`id` DESC";
+        // $data = Apartment::join('sponsorship_apartment', 'sponsorship_apartment.apartment_id', '=', 'apartments.id')
+        //     ->join('sponsorships', 'sponsorship_apartment.sponsorship_id', '=', 'sponsorships.id')
+        //     ->whereRaw('ST_Distance_Sphere(point(latitude, longitude), point(?, ?)) <= ?', [$latitude, $longitude, $radiusMeters])
+        //     ->orderByDesc('sponsorships.name')
+        //     ->get();
 
-        //$data = DB::select($query, [$latitude, $longitude, $radiusMeters]);
-        // foreach($data as $dato){
-        //     $immagini = json_decode($dato->images,true);
-        //     $dato->images = $immagini;
-        // }
+        $data = DB::select($query, [$latitude, $longitude, $radiusMeters]);
+        foreach($data as $dato){
+            $immagini = json_decode($dato->images,true);
+            $dato->images = $immagini;
+        }
         return $data;
     }
     public static function orderbyPayment()
