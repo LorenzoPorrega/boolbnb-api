@@ -56,4 +56,9 @@ class Apartment extends Model
     public function messages() {
         return $this->hasMany(Message::class);
     }
+
+    public function isSponsored()
+{
+    return $this->sponsorships()->where('end_time', '>', now())->exists();
+}
 };

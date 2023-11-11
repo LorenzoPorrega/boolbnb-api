@@ -7,6 +7,7 @@ use App\Models\Apartment;
 use App\Models\Sponsorship;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class SponsorshipController extends Controller
 {
@@ -69,6 +70,8 @@ class SponsorshipController extends Controller
         }
         return view('admin.sponsorships.sponsored');
     }
+
+    
 
     /**
      * Show the form for editing the specified resource.

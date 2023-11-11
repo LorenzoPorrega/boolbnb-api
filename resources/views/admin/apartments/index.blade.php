@@ -28,11 +28,13 @@
                 <div class="btn-container d-flex gap-3 my-2">
                     {{-- show button --}}
                     <a href="{{ route('admin.apartments.show', $apartment->slug) }}"><button type="submit"
-                            class="btn btn-primary">Show</button></a>
+                            class="btn btn-primary">Show</button></a> 
                     {{-- sponsorship button --}}
-                    <a href="{{ route('admin.sponsorship.show', $apartment->slug) }}">
-                        <button type="submit" class="btn btn-warning">Sponsor</button>
-                    </a>
+                    @if (!$apartment->isSponsored())<a href="{{ route('admin.sponsorship.show', $apartment->slug) }}">   @endif
+                        <button type="submit" class="btn btn-warning" @if ($apartment->isSponsored()) disabled @endif>
+                            @if ($apartment->isSponsored())Sponsored @else Sponsor @endif
+                        </button>
+                        @if (!$apartment->isSponsored())</a> @endif
                     {{-- edit button --}}
                     <a href="{{ route('admin.apartments.edit', $apartment->slug) }}"><button type="submit"
                             class="btn btn-info">Modifica</button></a>

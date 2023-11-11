@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ApartmentController;
+use App\Http\Controllers\Api\SponsorshipController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,3 +25,4 @@ Route::get("apartments/", [ApartmentController::class, "index"]);
 Route::get("selected/{slug}", [ApartmentController::class, "show"]);
 Route::get("coordinates", [ApartmentController::class,"getPositions"]);
 Route::get("searchApartament/{query}", [ApartmentController::class,"filter"]);
+Route::get("sponsoredApartments",[SponsorshipController::class, 'fetchSponsored']);
