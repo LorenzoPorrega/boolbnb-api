@@ -49,25 +49,37 @@ class ApartmentController extends Controller
 
         // Execute the query with the given parameters
         $data = DB::select($query, [$latitude, $longitude, $radiusMeters]);
-
+        foreach ($data as $dato) {
+            $immagini = json_decode($dato->images, true);
+            $indirizzo = str_replace("\"", "", $dato->address);
+            $dato->images = $immagini;
+            $dato->address = $indirizzo;
+        }
         return $data;
     }
-
     //con esso in teoria dovrebbe filtrare per raggio e anche per sponsorizzazione!!
-    public static function megaFilter($latitude, $longitude, $radius){
+    public static function megaFilter($latitude, $longitude, $radius)
+    {
 
         $radiusMeters = $radius * 1000;
-        $query =" SELECT *
-        FROM `sponsorship_apartment`
-        JOIN `sponsorships` ON `sponsorship_apartment`.`sponsorship_id` = `sponsorships`.`id`
-        RIGHT OUTER JOIN `apartments` ON `sponsorship_apartment`.`apartment_id` = `apartments`.`id`
-        WHERE ST_Distance_Sphere(point(latitude, longitude), point(?, ?)) <= ?
-        ORDER BY `sponsorships`.`name` DESC";
+        // $query =" SELECT *
+        // FROM `sponsorship_apartment`
+        // JOIN `sponsorships` ON `sponsorship_apartment`.`sponsorship_id` = `sponsorships`.`id`
+        // RIGHT OUTER JOIN `apartments` ON `sponsorship_apartment`.`apartment_id` = `apartments`.`id`
+        // WHERE ST_Distance_Sphere(point(latitude, longitude), point(?, ?)) <= ?
+        // ORDER BY `sponsorships`.`name` DESC";
+        $data = Apartment::join('sponsorship_apartment', 'sponsorship_apartment.apartment_id', '=', 'apartments.id')
+            ->join('sponsorships', 'sponsorship_apartment.sponsorship_id', '=', 'sponsorships.id')
+            ->whereRaw('ST_Distance_Sphere(point(latitude, longitude), point(?, ?)) <= ?', [$latitude, $longitude, $radiusMeters])
+            ->orderByDesc('sponsorships.name')
+            ->get();
 
-        $data =DB::select($query,[$latitude, $longitude, $radiusMeters]);
+        //$data = DB::select($query, [$latitude, $longitude, $radiusMeters]);
+        // foreach($data as $dato){
+        //     $immagini = json_decode($dato->images,true);
+        //     $dato->images = $immagini;
+        // }
         return $data;
-
-
     }
     public static function orderbyPayment()
     {
@@ -78,7 +90,7 @@ class ApartmentController extends Controller
             ->whereNull('deleted_at')
             ->get();
 
-            return $sponsorship_apartments;
+        return $sponsorship_apartments;
     }
 
 
@@ -115,8 +127,12 @@ class ApartmentController extends Controller
             // $raggio = 80;
             //$risultati = ApartmentController::pointsWithinRadius($latitude, $longitude, $raggio);
             $risultati = ApartmentController::getDataWithinRadius($latitude, $longitude, $raggio);
+            // $risultati = DB::table('apartments')
+            //     ->whereRaw('ST_Distance_Sphere(point(latitude, longitude), point(?, ?)) <= ?', [$latitude, $longitude, $raggio])
+            //     ->paginate(1);
+            
             //prova Megafilter
-            $appartamentiFiltrati = ApartmentController::megaFilter($latitude,$longitude,$raggio);
+            $appartamentiFiltrati = ApartmentController::megaFilter($latitude, $longitude, $raggio);
         }
 
         // Additional filter based on municipality
@@ -125,11 +141,11 @@ class ApartmentController extends Controller
         // }
 
         $filteredApartments = $apartmentsQuery->get();
-        
+
         //$appartamentiPaganti = ApartmentController::orderbyPayment();
 
         //solo per fini di Dev restituisco gli appartamenti totali e anche quelli filtrati con anche il raggio scelto.
-        return response()->json(['apartments' => $filteredApartments,'funzione' => $risultati, 'raggio' => $raggio, 'consigliati' => $appartamentiFiltrati ]);
+        return response()->json(['apartments' => $filteredApartments, 'funzione' => $risultati, 'raggio' => $raggio, 'consigliati' => $appartamentiFiltrati]);
     }
 
     public function show($slug)
