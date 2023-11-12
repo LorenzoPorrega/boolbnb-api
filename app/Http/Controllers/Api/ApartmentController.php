@@ -111,6 +111,7 @@ class ApartmentController extends Controller
             )) AS distance")
             ->having('distance', '<', $radius)
             ->orderByDesc('sponsorships.id')
+            ->where('end_time', '>', now())
             ->get();
 
         // $results = $query->union($query2);
