@@ -9,12 +9,12 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class NewMessage extends Mailable
+class NewMessageReceived extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $formData = [];
-
+    
     /**
      * Create a new message instance.
      */
@@ -29,7 +29,7 @@ class NewMessage extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Thanks for your message, we will contact you shortly',
+            subject: 'New Message Received',
         );
     }
 
@@ -39,7 +39,7 @@ class NewMessage extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.new_message',
+            markdown: 'emails.new_message_received',
         );
     }
 
