@@ -19,7 +19,7 @@ class ApartmentController extends Controller
     //funzione aritmetica, molto interessante ma non funzionante
     public static function pointsWithinRadius($latitude, $longitude, $radius)
     {
-        $presetRadius = 20;
+        $presetRadius = 6371;
 
         $lat1 = deg2rad($latitude);
         $lon1 = deg2rad($longitude);
@@ -32,37 +32,19 @@ class ApartmentController extends Controller
             )) AS distance"
         )
             ->having('distance', '<', $radius)
+            ->orderBy('distance')
             ->get();
 
         return $results;
     }
     //funzione semplice che converte correttamente il valore del raggio e filtra 
     //la tabella appartamenti e prende tutti dentro il raggio dato 
-    public static function getDataWithinRadius($latitude, $longitude, $radius)
-    {
-        // Convert radius from kilometers to meters
-        $radiusMeters = $radius * 1000;
-
-        // Define the SQL query to retrieve data within the radius
-        $query = "SELECT * FROM apartments
-                  WHERE ST_Distance_Sphere(point(latitude, longitude), point(?, ?)) <= ?";
-
-        // Execute the query with the given parameters
-        $data = DB::select($query, [$latitude, $longitude, $radiusMeters]);
-        foreach ($data as $dato) {
-            $immagini = json_decode($dato->images, true);
-            $indirizzo = str_replace("\"", "", $dato->address);
-            $dato->images = $immagini;
-            $dato->address = $indirizzo;
-        }
-        return $data;
-    }
     //con esso in teoria dovrebbe filtrare per raggio e anche per sponsorizzazione!!
     public static function megaFilter($latitude, $longitude, $radius)
     {
 
         $radiusMeters = $radius * 1000;
-        $query =" SELECT *
+        $query = " SELECT *
         FROM `sponsorship_apartment`
         JOIN `sponsorships` ON `sponsorship_apartment`.`sponsorship_id` = `sponsorships`.`id`
         RIGHT OUTER JOIN `apartments` ON `sponsorship_apartment`.`apartment_id` = `apartments`.`id`
@@ -75,8 +57,8 @@ class ApartmentController extends Controller
         //     ->get();
 
         $data = DB::select($query, [$latitude, $longitude, $radiusMeters]);
-        foreach($data as $dato){
-            $immagini = json_decode($dato->images,true);
+        foreach ($data as $dato) {
+            $immagini = json_decode($dato->images, true);
             $dato->images = $immagini;
         }
         return $data;
@@ -92,7 +74,29 @@ class ApartmentController extends Controller
 
         return $sponsorship_apartments;
     }
+    public static function MasterFilter($latitude, $longitude, $radius)
 
+    {
+        $presetRadius = 6371;
+
+        $lat1 = deg2rad($latitude);
+        $lon1 = deg2rad($longitude);
+
+        $query3 = Apartment::leftJoin('sponsorship_apartment', 'sponsorship_apartment.apartment_id', '=', 'apartments.id')
+            ->leftJoin('sponsorships', 'sponsorship_apartment.sponsorship_id', '=', 'sponsorships.id')
+            ->selectRaw("*,
+            ($presetRadius * ACOS(
+                COS(RADIANS(latitude)) * COS($lat1) * COS(RADIANS(longitude) - $lon1) +
+                SIN(RADIANS(latitude)) * SIN($lat1)
+            )) AS distance")
+            ->having('distance', '<', $radius)
+            ->orderByDesc('sponsorships.id')
+            ->get();
+
+        // $results = $query->union($query2);
+        $results = $query3;
+        return $results;
+    }
 
 
     public function index(Request $request)
@@ -123,16 +127,17 @@ class ApartmentController extends Controller
         if (!empty($bathroom_numFilter)) {
             $apartmentsQuery->where('bathroom_num', "like", $bathroom_numFilter);
         }
-        if ($latitude !== '') {
+        if ($latitude !== "") {
             // $raggio = 80;
+            $risultati = ApartmentController::MasterFilter($latitude, $longitude, $raggio);
+            $sponsorizzati = [];
+            foreach($risultati as $risultato){
+                if($risultato->name !== null){
+                    $sponsorizzati[]= $risultato;
+                }
+            }
+           
             //$risultati = ApartmentController::pointsWithinRadius($latitude, $longitude, $raggio);
-            $risultati = ApartmentController::getDataWithinRadius($latitude, $longitude, $raggio);
-            // $risultati = DB::table('apartments')
-            //     ->whereRaw('ST_Distance_Sphere(point(latitude, longitude), point(?, ?)) <= ?', [$latitude, $longitude, $raggio])
-            //     ->paginate(1);
-            
-            //prova Megafilter
-            $appartamentiFiltrati = ApartmentController::megaFilter($latitude, $longitude, $raggio);
         }
 
         // Additional filter based on municipality
@@ -145,7 +150,7 @@ class ApartmentController extends Controller
         //$appartamentiPaganti = ApartmentController::orderbyPayment();
 
         //solo per fini di Dev restituisco gli appartamenti totali e anche quelli filtrati con anche il raggio scelto.
-        return response()->json(['apartments' => $filteredApartments, 'funzione' => $risultati, 'raggio' => $raggio, 'consigliati' => $appartamentiFiltrati]);
+        return response()->json(['apartments' => $filteredApartments, 'funzione' => $risultati,'sponsorizzati' => $sponsorizzati, 'raggio' => $raggio]);
     }
 
     public function show($slug)
