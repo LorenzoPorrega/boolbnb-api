@@ -49,10 +49,27 @@ Route::middleware('auth')
         Route::resource('sponsorship', ApartmentController::class);
         Route::post('/sponsorship/sponsored', [SponsorshipController::class, "sponsored"])->name('sponsorship.sponsored');
 });
+
 Route::get('example', function () {
     return view('example');
 });
+
 Route::get('tomtom', function () {
     return view('tomtom');
 });
+
+Route::get("mails/new_message", function () {
+    return new App\Mail\NewMessage();
+});
+
 require __DIR__.'/auth.php';
+
+// Rotte create solo per test grafiche emails
+// vedi rotta localhost:1:8000/mails/NewMessage
+// Route::get("/emails/NewMessage", function() {
+//     return new App\Mail\NewMessage();
+// });
+// // vedi rotta localhost:1:8000/mails/NewMessageReceived
+// Route::get("/emails/NewMessageReceived", function() {
+//     return new App\Mail\NewMessageReceived();
+// });

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ApartmentController;
+use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\SponsorshipController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -27,4 +28,5 @@ Route::get("coordinates", [ApartmentController::class,"getPositions"]);
 Route::get("searchApartament/{query}", [ApartmentController::class,"filter"]);
 Route::get("sponsoredApartments",[SponsorshipController::class, 'fetchSponsored']);
 Route::get("postPosition/", [ApartmentController::class,"postPosition"]);
+Route::post("apartments/{slug}/messages", [MessageController::class, "store"]);
 Route::post("saveCostumerIpAdress", [ApartmentController::class, "saveCostumerIpAdress"]);
