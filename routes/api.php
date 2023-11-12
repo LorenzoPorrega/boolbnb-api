@@ -27,3 +27,4 @@ Route::get("coordinates", [ApartmentController::class,"getPositions"]);
 Route::get("searchApartament/{query}", [ApartmentController::class,"filter"]);
 Route::get("sponsoredApartments",[SponsorshipController::class, 'fetchSponsored']);
 Route::get("postPosition/", [ApartmentController::class,"postPosition"]);
+Route::post("saveCostumerIpAdress", [ApartmentController::class, "saveCostumerIpAdress"]);

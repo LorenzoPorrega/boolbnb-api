@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Amenity;
 use App\Models\Apartment;
 use App\Models\User;
+use App\Models\View;
 use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -39,6 +40,25 @@ class ApartmentController extends Controller
     }
     //funzione semplice che converte correttamente il valore del raggio e filtra 
     //la tabella appartamenti e prende tutti dentro il raggio dato 
+    public static function getDataWithinRadius($latitude, $longitude, $radius)
+    {
+        // Convert radius from kilometers to meters
+        $radiusMeters = $radius * 1000;
+
+        // Define the SQL query to retrieve data within the radius
+        $query = "SELECT * FROM apartments
+                WHERE ST_Distance_Sphere(point(latitude, longitude), point(?, ?)) <= ?";
+
+        // Execute the query with the given parameters
+        $data = DB::select($query, [$latitude, $longitude, $radiusMeters]);
+        foreach ($data as $dato) {
+            $immagini = json_decode($dato->images, true);
+            $indirizzo = str_replace("\"", "", $dato->address);
+            $dato->images = $immagini;
+            $dato->address = $indirizzo;
+        }
+        return $data;
+    }
     //con esso in teoria dovrebbe filtrare per raggio e anche per sponsorizzazione!!
     public static function megaFilter($latitude, $longitude, $radius)
     {
@@ -101,8 +121,6 @@ class ApartmentController extends Controller
 
     public function index(Request $request)
     {
-
-
         $rooms_num = $request->input('rooms_num');
         $beds_numFilter = $request->input('beds_num');
         $bathroom_numFilter = $request->input('bath_num');
@@ -112,7 +130,6 @@ class ApartmentController extends Controller
         $latitude =  $request->input('latitude');
         $raggio = $request->input('distance');
 
-        // Start with the base query
         $apartmentsQuery = Apartment::query();
 
         // Apply filters based on request parameters
@@ -155,6 +172,11 @@ class ApartmentController extends Controller
 
     public function show($slug)
     {
+        /* Commentata perché prende l'ip del server backend, dobbiamo prendere
+        l'ip del visitatore in front-end */
+        /* $ip = $request->ip(); */
+
+        // Start with the base query
         $showedApartmentQuery = Apartment::query();
 
         /* $selectedApartmentSlug = $request->input("selectedApartmentSlug"); */
@@ -164,21 +186,18 @@ class ApartmentController extends Controller
         $showedApartmentQuery->with(['amenities']);
         /*ora con lo slug sempre usato per filtrare l'appartamento faciamo una query
         per poter ricavare l'user_id di chi ha registrato l'appartamento  */
-        $utenti = DB::table('apartments')->where('slug', $slug)->select('user_id')->get();
-        // $ utenti sarà un array contenente un solo elemento poichè c'è un solo proprietario
-        // per recupeerarlo non possiamo fare $utenti[0]['user_id'] perche è un oggetto
-        $numero = $utenti[0]->user_id;
-        //$numero è un numero di riferenza del utente 
-        $utente = DB::table('users')->find($numero);
+        $hosts= DB::table('apartments')->where('slug', $slug)->select('user_id')->get();
+        // $hosts sarà un array contenente un solo elemento poichè c'è un solo proprietario
+        // per recuperarlo non possiamo fare $host[0]['user_id'] perche è un oggetto
+        $hostId = $hosts[0]->user_id;
+        //$hostId è l'id del'host dell'appartamento in show
+        $host = DB::table('users')->find($hostId);
         //cancello la passowrd per non restituirla in front-office
-        unset($utente->password);
-        //$Amenity =$showedApartmentQuery::with('amenities');
-
-
+        unset($host->password);
 
         $showedApartment = $showedApartmentQuery->get();
 
-        return response()->json(['singleApartment' => $showedApartment, 'utente' => $utente]);
+        return response()->json(['showedApartment' => $showedApartment, 'host' => $host]);
     }
 
     public function getPositions()
@@ -240,5 +259,27 @@ class ApartmentController extends Controller
         //dd($arraynuovo);
 
         return response()->json(['data' => $dati]);
+    }
+
+    public function saveCostumerIpAdress(Request $request){
+        // Da fare:
+        // Aggiungere lo slug dell'appartamento correntemente visitato negli argomenti e passare
+        // anche quello nella chiamata in front-office
+        // Salvare l'ip del visitatore ($ip) nella tabella "views" relazionandolo all'appartamento
+        // visitato scrivendo nella colonna "apartment_id".
+        $ip = $request->ipAdress;
+        $apartmentSlug = $request->showedApartmentSlug;
+
+        $apartment = Apartment::where('slug', $apartmentSlug)->first();
+        
+        View::create([
+            'ip_address' => $ip,
+            'apartment_id' => $apartment->id,
+            'created_time' => now(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        return response()->json($ip);
     }
 }
