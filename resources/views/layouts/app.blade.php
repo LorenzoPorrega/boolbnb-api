@@ -47,7 +47,7 @@
                 <div class="row">
                     <div class="logo">
                         <a href="/">
-                            <img src="/images/boolbnb-logo-2.png" alt="boolbnb-logo-header">
+                            <img src="/images/boolbnb-logo-2.png" alt="boolbnb-logo-header" style="width: 200px">
                           </a>
                     </div>
                 </div>
@@ -60,7 +60,10 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
+                    <ul class="navbar-nav me-auto gap-3">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.apartments.index') }}">Your apartments</a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.apartments.create') }}">Add 1 apartment</a>
                         </li>
