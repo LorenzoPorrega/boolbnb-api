@@ -9,6 +9,14 @@ class View extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'ip_address',
+        'apartment_id',
+        'created_time',
+        'created_at',
+        'updated_at',
+    ];
+
     // Relazione many-to-one con Apartment
     public function apartment()
     {

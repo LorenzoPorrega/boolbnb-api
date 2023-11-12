@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Amenity;
 use App\Models\Apartment;
 use App\Models\User;
+use App\Models\View;
 use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -45,7 +46,7 @@ class ApartmentController extends Controller
 
         // Define the SQL query to retrieve data within the radius
         $query = "SELECT * FROM apartments
-                  WHERE ST_Distance_Sphere(point(latitude, longitude), point(?, ?)) <= ?";
+                WHERE ST_Distance_Sphere(point(latitude, longitude), point(?, ?)) <= ?";
 
         // Execute the query with the given parameters
         $data = DB::select($query, [$latitude, $longitude, $radiusMeters]);
@@ -97,8 +98,6 @@ class ApartmentController extends Controller
 
     public function index(Request $request)
     {
-
-
         $rooms_num = $request->input('rooms_num');
         $beds_numFilter = $request->input('beds_num');
         $bathroom_numFilter = $request->input('bath_num');
@@ -107,7 +106,7 @@ class ApartmentController extends Controller
         $longitude =  $request->input('longitude');
         $latitude =  $request->input('latitude');
         $raggio = $request->input('distance');
-     
+
         $apartmentsQuery = Apartment::query();
 
         // Apply filters based on request parameters
@@ -238,11 +237,25 @@ class ApartmentController extends Controller
         return response()->json(['data' => $dati]);
     }
 
-    public function saveCostumerIpAdress($ip){
+    public function saveCostumerIpAdress(Request $request){
         // Da fare:
         // Aggiungere lo slug dell'appartamento correntemente visitato negli argomenti e passare
         // anche quello nella chiamata in front-office
         // Salvare l'ip del visitatore ($ip) nella tabella "views" relazionandolo all'appartamento
         // visitato scrivendo nella colonna "apartment_id".
+        $ip = $request->ipAdress;
+        $apartmentSlug = $request->showedApartmentSlug;
+
+        $apartment = Apartment::where('slug', $apartmentSlug)->first();
+        
+        View::create([
+            'ip_address' => $ip,
+            'apartment_id' => $apartment->id,
+            'created_time' => now(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        return response()->json($ip);
     }
 }
