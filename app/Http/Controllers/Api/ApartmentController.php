@@ -145,7 +145,7 @@ class ApartmentController extends Controller
         //$appartamentiPaganti = ApartmentController::orderbyPayment();
 
         //solo per fini di Dev restituisco gli appartamenti totali e anche quelli filtrati con anche il raggio scelto.
-        return response()->json(['apartments' => $filteredApartments, 'funzione' => $risultati, 'raggio' => $raggio, 'consigliati' => $appartamentiFiltrati])->with('user', $request->user());;
+        return response()->json(['apartments' => $filteredApartments, 'funzione' => $risultati, 'raggio' => $raggio, 'consigliati' => $appartamentiFiltrati])->with('user', $request->user());
     }
 
     public function show($slug)
