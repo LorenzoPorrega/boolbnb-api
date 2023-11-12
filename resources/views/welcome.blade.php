@@ -13,7 +13,7 @@
 
     <div class="content">
         <div class="container text-center my-5">
-            This project was totally made by:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Andrea Colombo &nbsp; Islam Benguerba &nbsp; Lorenzo Porrega &nbsp; Michele Gresta
+            <strong>Project made by:</strong>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Andrea Colombo &nbsp; Islam Benguerba &nbsp; Lorenzo Porrega &nbsp; Michele Gresta
         </div>
     </div> 
 @endsection
