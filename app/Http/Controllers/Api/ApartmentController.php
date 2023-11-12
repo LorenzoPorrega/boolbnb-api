@@ -9,6 +9,7 @@ use App\Models\Apartment;
 use App\Models\User;
 use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ApartmentController extends Controller
@@ -97,7 +98,7 @@ class ApartmentController extends Controller
 
     public function index(Request $request)
     {
-
+        $userLog = Auth::user();
 
         $rooms_num = $request->input('rooms_num');
         $beds_numFilter = $request->input('beds_num');
@@ -145,7 +146,7 @@ class ApartmentController extends Controller
         //$appartamentiPaganti = ApartmentController::orderbyPayment();
 
         //solo per fini di Dev restituisco gli appartamenti totali e anche quelli filtrati con anche il raggio scelto.
-        return response()->json(['apartments' => $filteredApartments, 'funzione' => $risultati, 'raggio' => $raggio, 'consigliati' => $appartamentiFiltrati])->with('user', $request->user());
+        return response()->json(['apartments' => $filteredApartments, 'funzione' => $risultati, 'raggio' => $raggio, 'consigliati' => $appartamentiFiltrati, 'user' => $userLog]);
     }
 
     public function show($slug)
