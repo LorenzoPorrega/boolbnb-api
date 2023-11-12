@@ -25,3 +25,4 @@ Route::get("selected/{slug}", [ApartmentController::class, "show"]);
 Route::get("coordinates", [ApartmentController::class,"getPositions"]);
 Route::get("searchApartament/{query}", [ApartmentController::class,"filter"]);
 Route::get("postPosition/", [ApartmentController::class,"postPosition"]);
+Route::post("saveCostumerIpAdress", [ApartmentController::class, "saveCostumerIpAdress"]);

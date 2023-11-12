@@ -147,9 +147,12 @@ class ApartmentController extends Controller
         return response()->json(['apartments' => $filteredApartments, 'funzione' => $risultati, 'raggio' => $raggio, 'consigliati' => $appartamentiFiltrati]);
     }
 
-    public function show(Request $request ,$slug)
+    public function show($slug)
     {
-        $ip = $request->ip();
+        /* Commentata perché prende l'ip del server backend, dobbiamo prendere
+        l'ip del visitatore in front-end */
+        /* $ip = $request->ip(); */
+
         // Start with the base query
         $showedApartmentQuery = Apartment::query();
 
@@ -160,21 +163,18 @@ class ApartmentController extends Controller
         $showedApartmentQuery->with(['amenities']);
         /*ora con lo slug sempre usato per filtrare l'appartamento faciamo una query
         per poter ricavare l'user_id di chi ha registrato l'appartamento  */
-        $utenti = DB::table('apartments')->where('slug', $slug)->select('user_id')->get();
-        // $ utenti sarà un array contenente un solo elemento poichè c'è un solo proprietario
-        // per recupeerarlo non possiamo fare $utenti[0]['user_id'] perche è un oggetto
-        $numero = $utenti[0]->user_id;
-        //$numero è un numero di riferenza del utente 
-        $utente = DB::table('users')->find($numero);
+        $hosts= DB::table('apartments')->where('slug', $slug)->select('user_id')->get();
+        // $hosts sarà un array contenente un solo elemento poichè c'è un solo proprietario
+        // per recuperarlo non possiamo fare $host[0]['user_id'] perche è un oggetto
+        $hostId = $hosts[0]->user_id;
+        //$hostId è l'id del'host dell'appartamento in show
+        $host = DB::table('users')->find($hostId);
         //cancello la passowrd per non restituirla in front-office
-        unset($utente->password);
-        //$Amenity =$showedApartmentQuery::with('amenities');
-
-
+        unset($host->password);
 
         $showedApartment = $showedApartmentQuery->get();
 
-        return response()->json(['singleApartment' => $showedApartment, 'utente' => $utente, 'ip' => $ip]);
+        return response()->json(['showedApartment' => $showedApartment, 'host' => $host]);
     }
 
     public function getPositions()
@@ -236,5 +236,13 @@ class ApartmentController extends Controller
         //dd($arraynuovo);
 
         return response()->json(['data' => $dati]);
+    }
+
+    public function saveCostumerIpAdress($ip){
+        // Da fare:
+        // Aggiungere lo slug dell'appartamento correntemente visitato negli argomenti e passare
+        // anche quello nella chiamata in front-office
+        // Salvare l'ip del visitatore ($ip) nella tabella "views" relazionandolo all'appartamento
+        // visitato scrivendo nella colonna "apartment_id".
     }
 }

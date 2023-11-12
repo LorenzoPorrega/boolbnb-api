@@ -180,8 +180,6 @@ class ApartmentController extends Controller
    */
   public function update(ApartmentUpsertRequest $request, $id)
   {
-    //
-    dd();
     $apartment = Apartment::findOrFail($id);
     $data = $request->validated();
     if (isset($data['images'])) {
@@ -199,6 +197,7 @@ class ApartmentController extends Controller
 
       $data['images'] = $images;
     }
+
     $apartment->amenities()->sync($data["amenity"]);
     $apartment->update($data);
     return redirect()->route('admin.apartments.index');
