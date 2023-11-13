@@ -96,6 +96,9 @@
                                 {{-- edit button --}}
                                 <a href="{{ route('admin.apartments.edit', $apartment->slug) }}"><button type="submit"
                                         class="btn btn-info">Modifica</button></a>
+                                    {{-- Messages --}}
+                                    <a href="{{ route('admin.message.show', $apartment->slug) }}"><button type="submit"
+                                        class="btn btn-success">Messages</button></a>
                                 <!-- Button trigger modal -->
                                 <button type="button" class="btn btn-danger" data-bs-toggle="modal"
                                     data-bs-target="#exampleModal">

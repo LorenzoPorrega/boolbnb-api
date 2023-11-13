@@ -1,8 +1,11 @@
 <?php
 
 use App\Http\Controllers\Admin\ApartmentController;
+use App\Http\Controllers\Admin\MessageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\SponsorshipController;
+use App\Http\Controllers\Api\MessageController as ApiMessageController;
+use App\Models\Message;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Route;
 
@@ -48,7 +51,11 @@ Route::middleware('auth')
         Route::get("/sponsorship/{slug}", [SponsorshipController::class, 'show'])->name('sponsorship.show');
         Route::resource('sponsorship', ApartmentController::class);
         Route::post('/sponsorship/sponsored', [SponsorshipController::class, "sponsored"])->name('sponsorship.sponsored');
-});
+
+        // sezione messaggi 
+        Route::get("/messages/{slug}", [MessageController::class, 'show'])->name('message.show');
+
+    });
 
 Route::get('example', function () {
     return view('example');
