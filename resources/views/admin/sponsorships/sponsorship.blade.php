@@ -82,7 +82,7 @@
                     <select class="form-select" name="sponsorship_id" id="sponsorship_id">
                         <option selected disabled>Selected sponsorship</option>
                         @foreach ($sponsorships as $singleSponsorship)
-                            <option value="{{ $singleSponsorship->id }}" required> {{ $singleSponsorship->price }} € -
+                            <option value="{{ $singleSponsorship->id }}" required> {{ $singleSponsorship->sponsorship_price }} € -
                                 {{ $singleSponsorship->duration_hours }} hours of sponsor</option>
                         @endforeach
                     </select>

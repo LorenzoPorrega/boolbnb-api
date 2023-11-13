@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
 
             $table->string("name");
-            $table->string("price");
+            $table->string("sponsorship_price");
             $table->integer("duration_hours");
             $table->text("icon_url");
 

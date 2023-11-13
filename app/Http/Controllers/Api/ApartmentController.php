@@ -154,8 +154,8 @@ class ApartmentController extends Controller
                     $sponsorizzati[]= $risultato;
                 }
             }
-           
-            //$risultati = ApartmentController::pointsWithinRadius($latitude, $longitude, $raggio);
+            
+            $risultati = ApartmentController::pointsWithinRadius($latitude, $longitude, $raggio);
         }
 
         // Additional filter based on municipality
@@ -282,5 +282,11 @@ class ApartmentController extends Controller
         ]);
 
         return response()->json($ip);
+    }
+
+    public function fetchAllAmenities(){
+        $allAmenities = Amenity::all();
+
+        return response()->json(["allAmenities" => $allAmenities]);
     }
 }
