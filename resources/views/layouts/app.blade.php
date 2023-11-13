@@ -11,8 +11,8 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
-
+    <title>BoolBnB</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('boolbnb-logo-favicon.png') }}"
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -48,7 +48,7 @@
                     <div class="logo">
                         <a href="/">
                             <img src="/images/boolbnb-logo-2.png" alt="boolbnb-logo-header" style="width: 200px">
-                          </a>
+                        </a>
                     </div>
                 </div>
 
