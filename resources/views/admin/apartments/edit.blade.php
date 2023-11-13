@@ -53,8 +53,8 @@
                         <div class="row">
                             @foreach ($apartment["images"] as $singleImage)
                             <div class="col-2">
-                                <div class="border rounded-3 border-dark">
-                                    <img src={{asset('storage/' . $apartment->images[0])}} alt="" class="w-100 rounded-3">
+                                <div class="border rounded-3 border-dark h-100">
+                                    <img src={{asset('storage/' . $singleImage)}} alt="" class="w-100 rounded-3 h-100" style="object-fit: cover">
                                 </div>
                             </div>
                             @endforeach

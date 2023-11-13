@@ -16,19 +16,19 @@ class SponsorshipSeeder extends Seeder
         $sponsorships = [
             [
                 "name" => "Silver",
-                "price" => "2,99",
+                "sponsorship_price" => "2,99",
                 "duration_hours" => "24",
                 "icon_url" => ""
             ],
             [
                 "name" => "Gold",
-                "price" => "5,99",
+                "sponsorship_price" => "5,99",
                 "duration_hours" => "72",
                 "icon_url" => ""
             ],
             [
                 "name" => "Platinum",
-                "price" => "9,99",
+                "sponsorship_price" => "9,99",
                 "duration_hours" => "144",
                 "icon_url" => ""
             ]
@@ -37,7 +37,7 @@ class SponsorshipSeeder extends Seeder
         foreach ($sponsorships as $singleSponsorship) {
             Sponsorship::create([
                 "name" => $singleSponsorship["name"],
-                "price" => $singleSponsorship["price"],
+                "sponsorship_price" => $singleSponsorship["sponsorship_price"],
                 "duration_hours" => $singleSponsorship["duration_hours"],
                 "icon_url" => $singleSponsorship["icon_url"]
             ]);
