@@ -1,9 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
+use App\Models\Apartment;
 use App\Models\Message;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MessageController extends Controller
 {
@@ -34,9 +37,16 @@ class MessageController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Message $message)
+    public function show($slug)
     {
-        //
+        $apartment = Apartment::where('slug', $slug)->firstOrFail();
+        $messages = Message::where('apartment_id', $apartment->id)->get();
+
+        if ($apartment->user_id != Auth::id()) {
+            return abort(404);
+        }
+
+        return view('admin.messages.message', ['apartment' => $apartment, 'messages' => $messages]);
     }
 
     /**
