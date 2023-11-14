@@ -11,9 +11,32 @@
             <h1>Show Page</h1>
             {{-- @dd($apartment) --}}
             <h2><strong>Titolo: </strong>{{ $apartment['title'] }}</h2>
-            <div class="container-img-show">
-                <img class="img-show" src="{{ asset('storage/' . $apartment->images[0]) }}" alt="">
+            
+            {{--  --}}
+            <div id="carouselExampleIndicators" class="carousel slide">
+                <div class="carousel-indicators">
+                    @foreach ($apartment->images as $key => $image)
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ $key }}" class="{{ $key === 0 ? 'active' : '' }}" aria-current="true" aria-label="Slide {{ $key + 1 }}"></button>
+                    @endforeach
+                </div>
+                <div class="carousel-inner">
+                    @foreach ($apartment->images as $key => $image)
+                        <div class="carousel-item {{ $key === 0 ? 'active' : '' }}">
+                            <img src="{{ asset('storage/' . $image) }}" class="d-block w-100" alt="Slide {{ $key + 1 }}">
+                        </div>
+                    @endforeach
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
             </div>
+            
+              {{--  --}}
             {{-- <ul class="form-control" id="input">
             <li><input type="text" id="address" value=""></li>
         </ul> --}}
@@ -47,6 +70,19 @@
                                     </div>
         </div>
     </div>
+    <style>
+        .carousel{
+            max-width: 500px;
+            max-height: 600px;
+        }
+        .carousel-inner{
+            height: 100%
+        }
+        .carousel-inner img {
+            height: 600px;
+            object-fit: cover;
+        }
+    </style>
     <script>
         const via = document.getElementById("via").value
         const latitude = document.getElementById("latitude").value
