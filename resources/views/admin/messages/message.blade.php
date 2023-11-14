@@ -2,6 +2,11 @@
 @section('content')
     <div class="container">
         <div class="row p-4 box-messages">
+            <div class="d-flex justify-content-end mb-3 me-5">
+                <a href="{{ route('admin.apartments.index') }}">
+                    <button class="btn btn-info">Back</button>
+                </a>
+            </div>
             <div class="col position-relative">
                 <h3 class="mb-4">Messages received</h3>
                 {{-- messages list --}}

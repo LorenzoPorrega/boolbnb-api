@@ -1,6 +1,12 @@
 @extends('layouts.app')
 @section('content')
     <div class="container my-5">
+        <div class="d-flex justify-content-end mb-3 me-5">
+            <a href="{{ route('admin.apartments.index') }}">
+                <button class="btn btn-info">Back</button>
+            </a>
+        </div>
+        
         <div class="row justify-content-center">
             <div class="col-8">
                 <form action="{{ route('admin.apartments.update', $apartment->id) }}" method="POST"
