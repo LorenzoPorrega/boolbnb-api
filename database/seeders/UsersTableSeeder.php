@@ -13,21 +13,31 @@ class UsersTableSeeder extends Seeder
      */
     public function run(): void
     {
-        $admin = [
-            "name" => "admin",
-            "surname" => "admin",
+        $admin = [[
+            "name" => "Islam Lorenzo",
+            "surname" => "cognome",
             "telephone_num" => "3450608812",
-            "email" => "admin@admin.com",
+            "email" => "test1@test.com",
             "password" => '$2y$10$lIb7iVEzEL6EyNSDyD8vguU96.TVlnpIcmzeEyHIwUEmcQzrrC5eS',
-        ];
-
-        $admin_user = new User();
-        $admin_user->name = $admin["name"];
-        $admin_user->surname = $admin["surname"];
-        $admin_user->telephone_num = $admin["telephone_num"];
-        $admin_user->email = $admin["email"];
-        $admin_user->password = $admin["password"];
-
-        $admin_user->save();
+            "id" => '1'
+        ],
+        [
+            "name" => "Andrea Michele",
+            "surname" => "cognome",
+            "telephone_num" => "3549841981",
+            "email" => "test2@test.com",
+            "password" => '$2y$10$lIb7iVEzEL6EyNSDyD8vguU96.TVlnpIcmzeEyHIwUEmcQzrrC5eS',
+            "id" => '2'
+        ]
+    ];
+        foreach ($admin as $singleOne)
+        User::create([
+            'name' => $singleOne['name'],
+            'surname' => $singleOne['surname'],
+            'telephone_num' => $singleOne['telephone_num'],
+            'email' => $singleOne['email'],
+            'password' => $singleOne['password'],
+            'id' => $singleOne['id'],
+        ]);
     }
 }
