@@ -40,13 +40,13 @@ class MessageController extends Controller
     public function show($slug)
     {
         $apartment = Apartment::where('slug', $slug)->firstOrFail();
-        $messages = Message::all();
+        $messages = Message::where('apartment_id', $apartment->id)->get();
 
         if ($apartment->user_id != Auth::id()) {
             return abort(404);
         }
 
-        return view('admin.messages.message', ['apartment' => $apartment, 'message' => $messages]);
+        return view('admin.messages.message', ['apartment' => $apartment, 'messages' => $messages]);
     }
 
     /**
