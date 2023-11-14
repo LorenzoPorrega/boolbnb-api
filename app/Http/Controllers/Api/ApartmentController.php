@@ -130,6 +130,7 @@ class ApartmentController extends Controller
         $longitude =  $request->input('longitude');
         $latitude =  $request->input('latitude');
         $raggio = $request->input('distance');
+        $amenitiesId = $request->input("filteredAmenitiesId");
 
         $apartmentsQuery = Apartment::query();
 
@@ -145,6 +146,24 @@ class ApartmentController extends Controller
         if (!empty($bathroom_numFilter)) {
             $apartmentsQuery->where('bathroom_num', "like", $bathroom_numFilter);
         }
+
+        if(!empty($amenitiesId)){
+            /* $apartmentsQuery = DB::table('amenity_apartment')
+            ->whereIn('amenity_id', $amenitiesId)
+            ->groupBy('apartment_id')
+            ->havingRaw('COUNT(DISTINCT amenity_id) = ?', [count($amenitiesId)])
+            ->pluck('apartment_id'); */
+
+            
+            $apartmentsQuery->whereHas('amenities', function ($q) use ($amenitiesId) {
+                if (is_array($amenitiesId)) {
+                    $q->whereIn('amenity_id', $amenitiesId);
+                } else {
+                    $q->where('amenity_id', $amenitiesId);
+                }
+            });
+        }
+
         if ($latitude !== "") {
             // $raggio = 80;
             $risultati = ApartmentController::MasterFilter($latitude, $longitude, $raggio);
