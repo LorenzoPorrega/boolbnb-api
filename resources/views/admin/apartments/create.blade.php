@@ -179,7 +179,7 @@
                       <div>
                         <input class="form-check-input amenity-check-box" type="checkbox"
                           value="{{ $singleAmenity->id }}" id="flexCheckDefault{{ $singleAmenity->id }}"
-                          name="amenity[]">
+                          name="amenity[]" {{ in_array($singleAmenity->id, old('services', [])) ? 'checked' : '' }}>
                         <label class="form-check-label" for="flexCheckDefault{{ $singleAmenity->id }}">
                           {{ $singleAmenity->name }}
                         </label>
