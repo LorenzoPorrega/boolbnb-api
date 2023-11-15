@@ -159,7 +159,7 @@ class ApartmentController extends Controller
    */
   public function edit($slug){
     // Istanzio un apartment come classe in base allo slug che passiamo nel bottone edit in index
-    $apartment = Apartment::where("slug", $slug)->firstOrFail();
+    $apartment = Apartment::with('amenities')->where("slug", $slug)->firstOrFail();
     
     if($apartment->user_id != Auth::id()){ 
       return abort(404);

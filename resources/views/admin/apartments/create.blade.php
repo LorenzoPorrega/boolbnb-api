@@ -15,7 +15,7 @@
           @enderror
           <div>
             <input type="text" class="form-control" value="{{ old('title') }}" id="title" name="title" required
-              oninput="validateInputs('title', 'title-error')">
+              oninput="validateInputs('title', 'title-error')" autofocus>
           </div>
         </div>
 

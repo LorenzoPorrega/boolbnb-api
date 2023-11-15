@@ -20,7 +20,7 @@
           @enderror
           <div>
             <input type="text" class="form-control" value="{{ old('title', $apartment->title) }}" id="title" name="title" required
-              oninput="validateInputs('title', 'title-error')">
+              oninput="validateInputs('title', 'title-error')" autofocus>
           </div>
         </div>
 
@@ -197,7 +197,7 @@
                       <div>
                         <input class="form-check-input amenity-check-box" type="checkbox"
                           value="{{ $singleAmenity->id }}" id="flexCheckDefault{{ $singleAmenity->id }}"
-                          name="amenity[]">
+                          name="amenity[]" {{ $apartment?->amenities->contains($singleAmenity) ? 'checked' : '' }}>
                         <label class="form-check-label" for="flexCheckDefault{{ $singleAmenity->id }}">
                           {{ $singleAmenity->name }}
                         </label>
