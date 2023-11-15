@@ -3,11 +3,7 @@ var options = {
         key: "9GGMAIWofgnTAUXbZTCGx0V0SDSxAx9I",
         language: "it-IT",
         limit: 5,
-    },
-    autocompleteOptions: {
-        key: "9GGMAIWofgnTAUXbZTCGx0V0SDSxAx9I",
-        language: "it-IT",
-    },
+    },    
 }
 var ttSearchBox = new tt.plugins.SearchBox(tt.services, options)
 var searchBoxHTML = ttSearchBox.getSearchBoxHTML()

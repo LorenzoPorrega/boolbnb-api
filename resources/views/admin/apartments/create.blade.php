@@ -26,10 +26,10 @@
           @error('address')
           <p class="text-danger d-block px-1 mb-2 bg-danger-subtle rounded-2 border-danger">{{ $message }}</p>
           @enderror
-          <div id="input">
-            <input type="text" class="form-control d-none" value="{{ old('address') }}" id="address" name="address"
+          {{-- <div id="input"> --}}
+            <input type="text" class="form-control" value="{{ old('address') }}" id="address" name="address"
               required>
-          </div>
+          {{-- </div> --}}
         </div>
 
         {{-- price --}}
