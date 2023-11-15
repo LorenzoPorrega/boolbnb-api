@@ -22,6 +22,13 @@
             </div>
         </div>
     </div>
+    <div class="row py-5 text-center">
+        <a href="{{ route('admin.apartments.index') }}">
+            <button class="btn btn-success">
+                Home
+            </button>
+        </a>
+    </div>
 </div>
 
 @endsection
