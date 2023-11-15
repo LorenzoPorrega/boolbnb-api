@@ -25,6 +25,7 @@ class MessageController extends Controller {
                 'message' => 'required|max:500'
             ]);
 
+
             // Ottenere l'indirizzo IP dell'utente
             $senderIpAddress = $request->ip();
 
@@ -41,9 +42,9 @@ class MessageController extends Controller {
             $newMessage->save();
 
             // invia mail all'utente che ha compilato il form
-            Mail::to($data['email'])->send(new NewMessage($data));
+            //Mail::to($data['email'])->send(new NewMessage($data));
             // invia mail di avviso messaggio ricevuto, al proprietario dell'appartamento
-            Mail::to('acolombo0911@gmail.com');//->send(new NewMessageReceived($data));
+            Mail::to('islam.benguerba@gmail.com')->send(new NewMessageReceived($data));
 
             return response()->json([
                 'message' => "Thank you {$data['name']} for your message. We will be in touch soon."
