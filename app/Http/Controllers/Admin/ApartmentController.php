@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Log;
 
 class ApartmentController extends Controller
@@ -90,17 +91,27 @@ class ApartmentController extends Controller
     // Data is validate in the ApartmentUpsertRequest's rules
 
     $data = $request->validated();
-    $addressObject = json_decode($data["address"]);
-    //converto l'indirizzo da stringa a oggetto
-    $indirizzo = $addressObject->data->text;
-    $lat = $addressObject->data->result->position->lat;
-    // @dd($lat);
-    $long =$addressObject->data->result->position->lng;
-    $data["address"] = $indirizzo;
-    //solo con due cifre....
-    $data["longitude"] = $long;
-    $data["latitude"] = $lat;
-    //@dd($data);
+    
+    if ($data["address"]) {
+      
+      $query = $data["address"];
+      $key = '9GGMAIWofgnTAUXbZTCGx0V0SDSxAx9I';
+
+      
+      $response = Http::get("https://api.tomtom.com/search/2/geocode/{$query}.json", [
+        'query' => $query,
+        'key' => $key,
+      ]);
+
+      $geocodingData = $response->json();
+
+      if (!empty($geocodingData['results'])) {
+        $location = $geocodingData['results'][0]['position'];
+        $data['latitude'] = $location['lat'];
+        $data['longitude'] = $location['lon'];
+      }
+    }
+
     // the user_id is grabbed via the following method and assign to the corrispending value
     $user_id = Auth::id();
 
@@ -148,7 +159,7 @@ class ApartmentController extends Controller
    */
   public function edit($slug){
     // Istanzio un apartment come classe in base allo slug che passiamo nel bottone edit in index
-    $apartment = Apartment::where("slug", $slug)->firstOrFail();
+    $apartment = Apartment::with('amenities')->where("slug", $slug)->firstOrFail();
     
     if($apartment->user_id != Auth::id()){ 
       return abort(404);
@@ -197,6 +208,32 @@ class ApartmentController extends Controller
 
       $data['images'] = $images;
     }
+
+    if ($data["title"] !== $apartment->title) {
+      // Call the function to generate a unique slug
+      $data["slug"] = $this->createSlug($data["title"]);
+    }
+
+    if ($data["address"] !== $apartment->address) {
+      
+      $query = $data["address"];
+      $key = '9GGMAIWofgnTAUXbZTCGx0V0SDSxAx9I';
+
+      
+      $response = Http::get("https://api.tomtom.com/search/2/geocode/{$query}.json", [
+        'query' => $query,
+        'key' => $key,
+      ]);
+
+      $geocodingData = $response->json();
+
+      if (!empty($geocodingData['results'])) {
+        $location = $geocodingData['results'][0]['position'];
+        $data['latitude'] = $location['lat'];
+        $data['longitude'] = $location['lon'];
+      }
+    }
+      
 
     $apartment->amenities()->sync($data["amenity"]);
     $apartment->update($data);

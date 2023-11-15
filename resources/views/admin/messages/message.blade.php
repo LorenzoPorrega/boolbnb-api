@@ -10,7 +10,7 @@
       </div>
 
       <div class="col position-relative">
-        <div class="card">
+        <div class="card overflow-hidden rounded-2">
           <div class="card-body text-white mailbox-widget pb-0">
             <h2 class="text-white ps-2 pb-2">Your Mailbox <i class="fas fa-envelope ms-2"></i></h2>
             <ul class="nav nav-tabs custom-tab border-bottom-0 mt-4" id="myTab" role="tablist">
