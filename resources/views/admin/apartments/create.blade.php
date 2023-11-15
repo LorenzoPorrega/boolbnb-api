@@ -1,5 +1,12 @@
 @extends('layouts.app')
 @section('content')
+<style lang="scss">
+  .list-group-item:hover{
+    cursor: pointer;
+    background-color: rgb(238, 238, 238);
+    transition: 0.45s;
+  }
+</style>
 <div class="container my-5">
   <div class="row justify-content-center">
     <div class="col-8">

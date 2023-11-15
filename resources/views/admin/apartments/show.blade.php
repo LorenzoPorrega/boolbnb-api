@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    @vite(['resources/scss/style.css'])
+    @vite(['resources/scss/app.scss'])
     <div class="container pt-4">
         <div class="position-relative">
             <div class="position-absolute top-0 end-0">
