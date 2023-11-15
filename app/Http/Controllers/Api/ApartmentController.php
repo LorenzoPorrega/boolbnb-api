@@ -94,27 +94,27 @@ class ApartmentController extends Controller
 
         return $sponsorship_apartments;
     }
-    public static function MasterFilter($latitude, $longitude, $radius)
+    public static function MasterFilter($latitude, $longitude, $radius, $rooms_num)
 
     {
         $presetRadius = 6371;
 
         $lat1 = deg2rad($latitude);
         $lon1 = deg2rad($longitude);
-
-        $query3 = Apartment::leftJoin('sponsorship_apartment', 'sponsorship_apartment.apartment_id', '=', 'apartments.id')
+        $query3 = Apartment::query();
+        $query3->leftJoin('sponsorship_apartment', 'sponsorship_apartment.apartment_id', '=', 'apartments.id')
             ->leftJoin('sponsorships', 'sponsorship_apartment.sponsorship_id', '=', 'sponsorships.id')
-            ->selectRaw("*,
+            ->selectRaw("apartments.*,
             ($presetRadius * ACOS(
                 COS(RADIANS(latitude)) * COS($lat1) * COS(RADIANS(longitude) - $lon1) +
                 SIN(RADIANS(latitude)) * SIN($lat1)
             )) AS distance")
             ->having('distance', '<', $radius)
             ->orderByDesc('sponsorships.id')
-            ->where('end_time', '>', now())
-            ->get();
+            ->where('end_time', '>', now());
+        // ->union(Apartment::where('rooms_num', ">=", $rooms_num));
 
-        // $results = $query->union($query2);
+        //$results = $query->union($query2);
         $results = $query3;
         return $results;
     }
@@ -124,37 +124,43 @@ class ApartmentController extends Controller
     {
         $rooms_num = $request->input('rooms_num');
         $beds_numFilter = $request->input('beds_num');
-        $bathroom_numFilter = $request->input('bath_num');
+        $bathroom_numFilter = $request->input('bathroom_num');
         $freeformAddress = $request->input('freeformAddress');
         // $position = $request->input('position');
         $longitude =  $request->input('longitude');
         $latitude =  $request->input('latitude');
         $raggio = $request->input('distance');
         $amenitiesId = $request->input("filteredAmenitiesId");
+        //query che prendera solo gli appartamenti sponsorizzati
 
         $apartmentsQuery = Apartment::query();
+        //query che prendera tutti gli appartamenti anche sponsorizzati 
+        $nuovaQuery = Apartment::query();
 
         // Apply filters based on request parameters
         if (!empty($rooms_num)) {
-            $apartmentsQuery->where('rooms_num', "like", $rooms_num);
+            $apartmentsQuery->where('rooms_num', ">=", $rooms_num);
+            $nuovaQuery->where('rooms_num', ">=", $rooms_num);
         }
 
         if (!empty($beds_numFilter)) {
-            $apartmentsQuery->where('beds_num', "like", $beds_numFilter);
+            $apartmentsQuery->where('beds_num', ">=", $beds_numFilter);
+            $nuovaQuery->where('beds_num', ">=", $beds_numFilter);
         }
 
         if (!empty($bathroom_numFilter)) {
-            $apartmentsQuery->where('bathroom_num', "like", $bathroom_numFilter);
+            $apartmentsQuery->where('bathroom_num', ">=", $bathroom_numFilter);
+            $nuovaQuery->where('bathroom_num', ">=", $bathroom_numFilter);
         }
 
-        if(!empty($amenitiesId)){
+        if (!empty($amenitiesId)) {
             /* $apartmentsQuery = DB::table('amenity_apartment')
             ->whereIn('amenity_id', $amenitiesId)
             ->groupBy('apartment_id')
             ->havingRaw('COUNT(DISTINCT amenity_id) = ?', [count($amenitiesId)])
             ->pluck('apartment_id'); */
 
-            
+
             $apartmentsQuery->whereHas('amenities', function ($q) use ($amenitiesId) {
                 if (is_array($amenitiesId)) {
                     $q->whereIn('amenity_id', $amenitiesId);
@@ -162,32 +168,79 @@ class ApartmentController extends Controller
                     $q->where('amenity_id', $amenitiesId);
                 }
             });
-        }
-
-        if ($latitude !== "") {
-            // $raggio = 80;
-            $risultati = ApartmentController::MasterFilter($latitude, $longitude, $raggio);
-            $sponsorizzati = [];
-            foreach($risultati as $risultato){
-                if($risultato->name !== null){
-                    $sponsorizzati[]= $risultato;
+            $nuovaQuery->whereHas('amenities', function ($q) use ($amenitiesId) {
+                if (is_array($amenitiesId)) {
+                    $q->whereIn('amenity_id', $amenitiesId);
+                } else {
+                    $q->where('amenity_id', $amenitiesId);
                 }
-            }
+            });
+        }
+        $apartmentsQuery->leftJoin('sponsorship_apartment', 'sponsorship_apartment.apartment_id', '=', 'apartments.id');
+        $apartmentsQuery->leftJoin('sponsorships', 'sponsorship_apartment.sponsorship_id', '=', 'sponsorships.id');
+        $apartmentsQuery->orderByDesc('sponsorships.id');
+        $apartmentsQuery->where('end_time', '>', now());
+
+        $nuovaQuery->leftJoin('sponsorship_apartment', 'sponsorship_apartment.apartment_id', '=', 'apartments.id');
+        $nuovaQuery->leftJoin('sponsorships', 'sponsorship_apartment.sponsorship_id', '=', 'sponsorships.id');
+        $nuovaQuery->whereNull('sponsorship_price'); 
+        if ($latitude !== null) {
+
+            // $raggio = 80;
+            // //$risultati = ApartmentController::MasterFilter($latitude, $longitude, $raggio, 3);
+            $presetRadius = 6371;
+            //
+            $lat1 = deg2rad($latitude);
+            $lon1 = deg2rad($longitude);
+            //diltro per distanza
             
-            $risultati = ApartmentController::pointsWithinRadius($latitude, $longitude, $raggio);
+            $nuovaQuery->selectRaw("*,
+            ($presetRadius * ACOS(
+                COS(RADIANS(latitude)) * COS($lat1) * COS(RADIANS(longitude) - $lon1) +
+                SIN(RADIANS(latitude)) * SIN($lat1)
+            )) AS distance");
+            $nuovaQuery->having('distance', '<', $raggio);
+           
+            $nuovaQuery->orderBy('distance'); 
+           
+          
+
+            
+            $apartmentsQuery->selectRaw("*,
+             ($presetRadius * ACOS(
+                 COS(RADIANS(latitude)) * COS($lat1) * COS(RADIANS(longitude) - $lon1) +
+                 SIN(RADIANS(latitude)) * SIN($lat1)
+             )) AS distance");
+            $apartmentsQuery->having('distance', '<', $raggio);
+           
+
+
+            // if ($risultati !== '') {
+            //     $apartmentsQuery->union($risultati);
+            // }
+            //$super->get();
+            //$sponsorizzati = [];
+            // foreach($risultati as $risultato){
+            //     if($risultato->name !== null){
+            //         $sponsorizzati[]= $risultato;
+            //     }
+            // }
+
+            //$risultati = ApartmentController::pointsWithinRadius($latitude, $longitude, $raggio); 
+            //$superQuery = $apartmentsQuery->merge($risultati);
         }
 
         // Additional filter based on municipality
         // if (!empty($freeformAddress)) {
         //     $apartmentsQuery->where('address', 'LIKE', '%' . $freeformAddress . '%');
-        // }
-
+        // } 
+        $nuovidati = $nuovaQuery->get();
         $filteredApartments = $apartmentsQuery->get();
 
         //$appartamentiPaganti = ApartmentController::orderbyPayment();
 
         //solo per fini di Dev restituisco gli appartamenti totali e anche quelli filtrati con anche il raggio scelto.
-        return response()->json(['apartments' => $filteredApartments, 'funzione' => $risultati,'sponsorizzati' => $sponsorizzati, 'raggio' => $raggio]);
+        return response()->json(['apartmentsSponsorizzati' => $filteredApartments, 'NotSponsorizzati' => $nuovidati, 'raggio' => $raggio]);
     }
 
     public function show($slug)
@@ -206,7 +259,7 @@ class ApartmentController extends Controller
         $showedApartmentQuery->with(['amenities']);
         /*ora con lo slug sempre usato per filtrare l'appartamento faciamo una query
         per poter ricavare l'user_id di chi ha registrato l'appartamento  */
-        $hosts= DB::table('apartments')->where('slug', $slug)->select('user_id')->get();
+        $hosts = DB::table('apartments')->where('slug', $slug)->select('user_id')->get();
         // $hosts sarà un array contenente un solo elemento poichè c'è un solo proprietario
         // per recuperarlo non possiamo fare $host[0]['user_id'] perche è un oggetto
         $hostId = $hosts[0]->user_id;
@@ -281,7 +334,8 @@ class ApartmentController extends Controller
         return response()->json(['data' => $dati]);
     }
 
-    public function saveCostumerIpAdress(Request $request){
+    public function saveCostumerIpAdress(Request $request)
+    {
         // Da fare:
         // Aggiungere lo slug dell'appartamento correntemente visitato negli argomenti e passare
         // anche quello nella chiamata in front-office
@@ -291,7 +345,7 @@ class ApartmentController extends Controller
         $apartmentSlug = $request->showedApartmentSlug;
 
         $apartment = Apartment::where('slug', $apartmentSlug)->first();
-        
+
         View::create([
             'ip_address' => $ip,
             'apartment_id' => $apartment->id,
@@ -303,7 +357,8 @@ class ApartmentController extends Controller
         return response()->json($ip);
     }
 
-    public function fetchAllAmenities(){
+    public function fetchAllAmenities()
+    {
         $allAmenities = Amenity::all();
 
         return response()->json(["allAmenities" => $allAmenities]);
