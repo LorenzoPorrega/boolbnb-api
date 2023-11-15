@@ -12,7 +12,7 @@
       <div class="col position-relative">
         <div class="card">
           <div class="card-body text-white mailbox-widget pb-0">
-            <h2 class="text-white pb-3">Your Mailbox <i class="fas fa-envelope ms-2"></i></h2>
+            <h2 class="text-white ps-2 pb-2">Your Mailbox <i class="fas fa-envelope ms-2"></i></h2>
             <ul class="nav nav-tabs custom-tab border-bottom-0 mt-4" id="myTab" role="tablist">
               <li class="nav-item">
                 <a class="nav-link" id="inbox-tab" data-toggle="tab" aria-controls="inbox" href="#inbox" role="tab" aria-selected="true">
@@ -34,7 +34,7 @@
           <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade active show" id="inbox" aria-labelledby="inbox-tab" role="tabpanel">
               <div>
-                <div class="row p-4 align-items-center justify-content-between">
+                <div class="row px-4 pt-4 pb-3 align-items-center justify-content-between">
                   <div class="col-6">
                     <h3 class="mb-0">Emails List</h3>
                   </div>
@@ -102,9 +102,6 @@
 
   <style lang="scss">
 
-  .box-messages {
-
-  }
   .card {
     position: relative;
     display: flex;
@@ -137,13 +134,9 @@
     color: #fff;
     border-bottom: 3px solid #2cd07e;
   } */
-  .no-wrap td, .no-wrap th {
-    white-space: nowrap;
-  }
+
   .table td, .table th {
-    padding: .9375rem .4rem;
-    vertical-align: top;
-    border-top: 1px solid rgba(120,130,140,.13);
+    padding: 1rem;
   }
 
 </style>
