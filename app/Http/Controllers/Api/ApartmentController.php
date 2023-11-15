@@ -131,20 +131,26 @@ class ApartmentController extends Controller
         $latitude =  $request->input('latitude');
         $raggio = $request->input('distance');
         $amenitiesId = $request->input("filteredAmenitiesId");
+        //query che prendera solo gli appartamenti sponsorizzati
 
         $apartmentsQuery = Apartment::query();
+        //query che prendera tutti gli appartamenti anche sponsorizzati 
+        $nuovaQuery = Apartment::query();
 
         // Apply filters based on request parameters
         if (!empty($rooms_num)) {
             $apartmentsQuery->where('rooms_num', ">=", $rooms_num);
+            $nuovaQuery->where('rooms_num', ">=", $rooms_num);
         }
 
         if (!empty($beds_numFilter)) {
             $apartmentsQuery->where('beds_num', ">=", $beds_numFilter);
+            $nuovaQuery->where('beds_num', ">=", $beds_numFilter);
         }
 
         if (!empty($bathroom_numFilter)) {
             $apartmentsQuery->where('bathroom_num', ">=", $bathroom_numFilter);
+            $nuovaQuery->where('bathroom_num', ">=", $bathroom_numFilter);
         }
 
         if (!empty($amenitiesId)) {
@@ -162,25 +168,53 @@ class ApartmentController extends Controller
                     $q->where('amenity_id', $amenitiesId);
                 }
             });
+            $nuovaQuery->whereHas('amenities', function ($q) use ($amenitiesId) {
+                if (is_array($amenitiesId)) {
+                    $q->whereIn('amenity_id', $amenitiesId);
+                } else {
+                    $q->where('amenity_id', $amenitiesId);
+                }
+            });
         }
+        $apartmentsQuery->leftJoin('sponsorship_apartment', 'sponsorship_apartment.apartment_id', '=', 'apartments.id');
+        $apartmentsQuery->leftJoin('sponsorships', 'sponsorship_apartment.sponsorship_id', '=', 'sponsorships.id');
+        $apartmentsQuery->orderByDesc('sponsorships.id');
+        $apartmentsQuery->where('end_time', '>', now());
 
-        if ($latitude !== "") {
+        $nuovaQuery->leftJoin('sponsorship_apartment', 'sponsorship_apartment.apartment_id', '=', 'apartments.id');
+        $nuovaQuery->leftJoin('sponsorships', 'sponsorship_apartment.sponsorship_id', '=', 'sponsorships.id');
+        $nuovaQuery->whereNull('sponsorship_price'); 
+        if ($latitude !== null) {
+
             // $raggio = 80;
             // //$risultati = ApartmentController::MasterFilter($latitude, $longitude, $raggio, 3);
-             $presetRadius = 6371;
-
+            $presetRadius = 6371;
+            //
             $lat1 = deg2rad($latitude);
             $lon1 = deg2rad($longitude);
-            $apartmentsQuery->leftJoin('sponsorship_apartment', 'sponsorship_apartment.apartment_id', '=', 'apartments.id');
-            $apartmentsQuery->leftJoin('sponsorships', 'sponsorship_apartment.sponsorship_id', '=', 'sponsorships.id');
+            //diltro per distanza
+            
+            $nuovaQuery->selectRaw("*,
+            ($presetRadius * ACOS(
+                COS(RADIANS(latitude)) * COS($lat1) * COS(RADIANS(longitude) - $lon1) +
+                SIN(RADIANS(latitude)) * SIN($lat1)
+            )) AS distance");
+            $nuovaQuery->having('distance', '<', $raggio);
+           
+            $nuovaQuery->orderBy('distance'); 
+           
+          
+
+            
             $apartmentsQuery->selectRaw("*,
              ($presetRadius * ACOS(
                  COS(RADIANS(latitude)) * COS($lat1) * COS(RADIANS(longitude) - $lon1) +
                  SIN(RADIANS(latitude)) * SIN($lat1)
              )) AS distance");
-             $apartmentsQuery->having('distance', '<', $raggio);
-             $apartmentsQuery->orderByDesc('sponsorships.id');
-             $apartmentsQuery->where('end_time', '>', now());
+            $apartmentsQuery->having('distance', '<', $raggio);
+           
+
+
             // if ($risultati !== '') {
             //     $apartmentsQuery->union($risultati);
             // }
@@ -200,14 +234,13 @@ class ApartmentController extends Controller
         // if (!empty($freeformAddress)) {
         //     $apartmentsQuery->where('address', 'LIKE', '%' . $freeformAddress . '%');
         // } 
-
-
+        $nuovidati = $nuovaQuery->get();
         $filteredApartments = $apartmentsQuery->get();
 
         //$appartamentiPaganti = ApartmentController::orderbyPayment();
 
         //solo per fini di Dev restituisco gli appartamenti totali e anche quelli filtrati con anche il raggio scelto.
-        return response()->json(['apartments' => $filteredApartments, 'funzione' => [], 'raggio' => $raggio]);
+        return response()->json(['apartmentsSponsorizzati' => $filteredApartments, 'NotSponsorizzati' => $nuovidati, 'raggio' => $raggio]);
     }
 
     public function show($slug)
