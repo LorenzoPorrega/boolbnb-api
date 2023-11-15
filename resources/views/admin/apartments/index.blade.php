@@ -80,7 +80,6 @@
                     <table class="table mb-0">
                         <thead>
                             <tr>
-                                <th class="border-gray-200" scope="col">ID</th>
                                 <th class="border-gray-200" scope="col">Image</th>
                                 <th class="border-gray-200" scope="col">Title</th>
                                 <th class="border-gray-200" scope="col">Address</th>
@@ -91,7 +90,6 @@
                         <tbody>
                             @foreach ($apartments as $apartment)
                             <tr class="align-middle">
-                                <td scope="row">{{ $apartment['id'] }}</td>
                                 <td>
                                     <a href="{{ route('admin.apartments.show', $apartment->slug) }}">
                                         <img src="{{ asset('storage/' . $apartment->images[0]) }}"
