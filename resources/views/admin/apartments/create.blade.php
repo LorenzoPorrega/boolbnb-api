@@ -26,9 +26,12 @@
           @error('address')
           <p class="text-danger d-block px-1 mb-2 bg-danger-subtle rounded-2 border-danger">{{ $message }}</p>
           @enderror
-          {{-- <div id="input"> --}}
+          {{-- <div id="input" value="{{ old('address', $apartment->address) }}"> --}}
             <input type="text" class="form-control" value="{{ old('address') }}" id="address" name="address"
-              required>
+              required autocomplete="off" oninput="validateInputs('address', 'address-error')">
+            <div class="position-relative" style="z-index: 999">
+              <ul id="address-suggestions" class="list-group position-absolute w-100 overflow-auto" style="max-height: 250px"></ul>
+            </div>
           {{-- </div> --}}
         </div>
 

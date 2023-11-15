@@ -65,7 +65,7 @@
                             <a class="nav-link" href="{{ route('admin.apartments.index') }}">Your apartments</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.apartments.create') }}">Add 1 apartment</a>
+                            <a class="nav-link" href="{{ route('admin.apartments.create') }}">Add an apartment</a>
                         </li>
                     </ul>
 

@@ -33,7 +33,10 @@
           @enderror
           {{-- <div id="input" value="{{ old('address', $apartment->address) }}"> --}}
             <input type="text" class="form-control" value="{{ old('address', $apartment->address) }}" id="address" name="address"
-              required>
+              required autocomplete="off" oninput="validateInputs('address', 'address-error')">
+            <div class="position-relative" style="z-index: 999">
+              <ul id="address-suggestions" class="list-group position-absolute w-100 overflow-auto" style="max-height: 250px"></ul>
+            </div>
           {{-- </div> --}}
         </div>
 
@@ -41,12 +44,13 @@
         <div class="mb-3">
           <label class="form-label fw-bold fs-5">Daily stay price</label>
           <small class="text-white price-error d-none bg-danger p-1 rounded-2">Fill this field</small>
+          <small class="text-white price-num-error d-none bg-danger p-1 rounded-2">This field must be a number</small>
           @error('price')
           <p class="text-danger d-block px-1 mb-2 bg-danger-subtle rounded-2 border-danger">{{ $message }}</p>
           @enderror
           <div>
             <input type="text" class="form-control" value="{{ old('price', $apartment->price) }}" id="price" name="price" required
-              oninput="validateInputs('price', 'price-error')">
+              oninput="validateInputsNumber('price', 'price-error', 'price-num-error')">
           </div>
         </div>
         {{-- old images --}}
@@ -92,13 +96,14 @@
         <div class="mb-3">
           <label class="form-label fw-bold fs-5">Rooms Number</label>
           <small class="text-white rooms-error d-none bg-danger p-1 rounded-2">Fill this field</small>
+          <small class="text-white rooms-num-error d-none bg-danger p-1 rounded-2">This field must be a number</small>
           @error('rooms_num')
           <p class="text-danger d-block px-1 mb-2 bg-danger-subtle rounded-2 border-danger">
             {{ $message }}</p>
           @enderror
           <div>
             <input type="text" class="form-control" value="{{ old('rooms_num', $apartment->rooms_num) }}" id="rooms_num" name="rooms_num"
-              required oninput="validateInputs('rooms_num', 'rooms-error')">
+              required oninput="validateInputsNumber('rooms_num', 'rooms-error', 'rooms-num-error')">
           </div>
         </div>
 
@@ -106,13 +111,14 @@
         <div class="mb-3">
           <label class="form-label fw-bold fs-5">Beds Number</label>
           <small class="text-white beds-error d-none bg-danger p-1 rounded-2">Fill this field</small>
+          <small class="text-white beds-num-error d-none bg-danger p-1 rounded-2">This field must be a number</small>
           @error('beds_num')
           <p class="text-danger d-block px-1 mb-2 bg-danger-subtle rounded-2 border-danger">
             {{ $message }}</p>
           @enderror
           <div>
             <input type="text" class="form-control" value="{{ old('beds_num', $apartment->beds_num) }}" id="beds_num" name="beds_num" required
-              oninput="validateInputs('beds_num', 'beds-error')">
+              oninput="validateInputsNumber('beds_num', 'beds-error', 'beds-num-error')">
           </div>
         </div>
 
@@ -120,13 +126,14 @@
         <div class="mb-3">
           <label class="form-label fw-bold fs-5">Bathrooms Number</label>
           <small class="text-white baths-error d-none bg-danger p-1 rounded-2">Fill this field</small>
+          <small class="text-white baths-num-error d-none bg-danger p-1 rounded-2">This field must be a number</small>
           @error('bathroom_num')
           <p class="text-danger d-block px-1 mb-2 bg-danger-subtle rounded-2 border-danger">
             {{ $message }}</p>
           @enderror
           <div>
             <input type="text" class="form-control" value="{{ old('bathroom_num', $apartment->bathroom_num) }}" id="bathroom_num"
-              name="bathroom_num" required oninput="validateInputs('bathroom_num', 'baths-error')">
+              name="bathroom_num" required oninput="validateInputsNumber('bathroom_num', 'baths-error', 'baths-num-error')">
           </div>
         </div>
 
@@ -148,14 +155,15 @@
         {{-- square meters --}}
         <div class="mb-3">
           <label class="form-label fw-bold fs-5">Square Meters</label>
-          <small class="text-white sqMeters-error d-none bg-danger p-1 rounded-2">Fill this field</small>
+          <small class="text-white squaremeters-error d-none bg-danger p-1 rounded-2">Fill this field</small>
+          <small class="text-white squaremeters-num-error d-none bg-danger p-1 rounded-2">This field must be a number</small>
           @error('square_meters')
           <p class="text-danger d-block px-1 mb-2 bg-danger-subtle rounded-2 border-danger">
             {{ $message }}</p>
           @enderror
           <div>
             <input type="text" class="form-control" value="{{ old('square_meters', $apartment->square_meters) }}" id="square_meters"
-              name="square_meters" required oninput="validateInputs('square_meters', 'sqMeters-error')" />
+              name="square_meters" required oninput="validateInputsNumber('square_meters', 'squaremeters-error', 'squaremeters-num-error')" />
           </div>
         </div>
 
@@ -230,6 +238,34 @@
       }
     }
   }
+
+  function validateInputsNumber(id, errorSpan, errorSpanNumber){
+    const input = document.getElementById(id);
+    let errorSpanElement = document.querySelector(`.${errorSpan}`);
+    let errorNumberSpanElement = document.querySelector(`.${errorSpanNumber}`);
+    
+    
+    if(!input.value){
+      input.classList.add("bg-danger-subtle");
+      errorNumberSpanElement.classList.replace("d-inline", "d-none");
+      errorSpanElement.classList.replace("d-none", "d-inline");
+    }
+    else if (input.value){
+      if(isNaN(input.value)){
+        input.classList.add("bg-danger-subtle");
+        errorNumberSpanElement.classList.replace("d-none", "d-inline");
+        errorSpanElement.classList.replace("d-inline", "d-none");
+      }
+      else if(!isNaN(input.value)){
+        input.classList.remove("bg-danger-subtle");
+        errorNumberSpanElement.classList.replace("d-inline", "d-none");
+        console.log("Condizione input.value");
+        input.classList.remove("bg-danger-subtle");
+        errorSpanElement.classList.replace("d-inline", "d-none");
+      }
+    }
+  }
+
   function checkAmenities() {
     const selectedAmenitiesCheckboxes = document.querySelectorAll('input.amenity-check-box:checked');
     const amenitiesError = document.querySelector(".amenities-error");
