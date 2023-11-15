@@ -211,7 +211,7 @@ class ApartmentController extends Controller
 
     if ($data["title"] !== $apartment->title) {
       // Call the function to generate a unique slug
-      $data["slug"] = $this->createSlug($data["title"]);
+      $data["slug"] = $this->generateSlug($data, $data["title"]);
     }
 
     if ($data["address"] !== $apartment->address) {
