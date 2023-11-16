@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Mail\NewMessage;
 use App\Models\Apartment;
+use App\Models\User;
 use App\Models\Message;
 use App\Mail\NewMessageReceived;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
 class MessageController extends Controller {
@@ -41,10 +43,15 @@ class MessageController extends Controller {
             // salvo il nuovo contatto nel DB
             $newMessage->save();
 
+            $userId = $apartment["user_id"];
+
+            // Ora puoi accedere all'email dell'utente
+            $userEmail = DB::table('users')->where('id', $userId)->select('email')->get();
+
             // invia mail all'utente che ha compilato il form
             //Mail::to($data['email'])->send(new NewMessage($data));
             // invia mail di avviso messaggio ricevuto, al proprietario dell'appartamento
-            Mail::to('islam.benguerba@gmail.com')->send(new NewMessageReceived($data));
+            Mail::to($userEmail)->send(new NewMessageReceived($data));
 
             return response()->json([
                 'message' => "Thank you {$data['name']} for your message. We will be in touch soon."

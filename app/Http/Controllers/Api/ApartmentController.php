@@ -154,13 +154,6 @@ class ApartmentController extends Controller
         }
 
         if (!empty($amenitiesId)) {
-            /* $apartmentsQuery = DB::table('amenity_apartment')
-            ->whereIn('amenity_id', $amenitiesId)
-            ->groupBy('apartment_id')
-            ->havingRaw('COUNT(DISTINCT amenity_id) = ?', [count($amenitiesId)])
-            ->pluck('apartment_id'); */
-
-
             $apartmentsQuery->whereHas('amenities', function ($q) use ($amenitiesId) {
                 if (is_array($amenitiesId)) {
                     $q->whereIn('amenity_id', $amenitiesId);

@@ -138,16 +138,16 @@
         </div>
 
         {{-- visibility --}}
-        <div class="row mb-3">
-            <label class="col-3 col-form-label">Visibility</label>
-            <div class="col-sm-9 d-flex flex-row">
+        <div class="mb-3">
+            <label class="form-label fw-bold fs-5 d-block">Visibility</label>
+            <div>
                 <div class="d-flex" style="width: fit-content">
                     <input type="radio" name="visibility" value="1" class="form-check-input mx-1"
                         @if (old('visibility', $apartment->visibility) == 1) checked @endif> Visibile
                 </div>
                 <div class="d-flex" style="width: fit-content">
                     <input type="radio" name="visibility" value="0" class="form-check-input mx-1"
-                        @if (old('visibility', $apartment->visibility) == 0) checked @endif> Non Visibile
+                        @if (old('visibility', $apartment->visibility) == 0) checked @endif> Not Visibile
                 </div>
             </div>
         </div>
