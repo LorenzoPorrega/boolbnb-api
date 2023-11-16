@@ -131,14 +131,14 @@
                                                 class="btn btn-success">Messages</button></a>
                                         <!-- Button trigger modal -->
                                         <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                            data-bs-target="#exampleModal">
+                                            data-bs-target="#exampleModal_{{ $apartment->id }}">
                                             Delete
                                         </button>
                                         <form action="{{ route('admin.apartments.destroy', $apartment->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <!-- Modal -->
-                                            <div class="modal fade" id="exampleModal" tabindex="-1"
+                                            <div class="modal fade" id="exampleModal_{{ $apartment->id }}" tabindex="-1"
                                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
