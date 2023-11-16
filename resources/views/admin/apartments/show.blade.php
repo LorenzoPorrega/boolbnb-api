@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
-    @vite(['resources/scss/app.scss'])
-    <div class="container pt-4">
+    @vite(['resources/scss/app.scss','resources/scss/style.css'])
+    <div class="container pt-4  pb-5">
         <div class="position-relative">
             <div class="position-absolute top-0 end-0">
                 <a href="{{ route('admin.apartments.index') }}">
@@ -57,7 +57,7 @@
         </h5>
         <h5> <strong>Servizi:</strong></h5>
         <div class="container">
-            <div class="row row-cols-3 row-cols-md-6 g-3">
+            <div class="row row-cols-2 row-cols-sm-3 row-cols-md-6 g-3">
                 @foreach ($apartment->amenities as $amenity)
                     <div class="col">
                         <div class="card h-100">
@@ -78,7 +78,7 @@
         <input class="input-none" type="text" value="{{ $apartment->longitude }}"
             id="longitude">
 
-        <div class="container-map position-relative">
+        <div class="container-map position-relative mb-3">
             <div class='control-panel' style="display: none">
                 {{-- <div class='heading'>
 <img src='/images/boolbnb-logo-2.png'>
