@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\ApartmentController;
 use App\Http\Controllers\ProfileController;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,6 +28,19 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+
+/* Route::get("/apartments", [ApartmentController::class, "index"])->name("apartments.index"); */
+
+// Routes group for ADMIN
+// admin.apartments.index, admin.apartments.show, admin.apartments.create, admin.apartments.edit, admin.apartments.update & admin.apartments.delete
+Route::middleware('auth')
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function(){
+        Route::resource('apartments', ApartmentController::class);
+        /* Route::get("/apartments/{apartment}", [ApartmentController::class, "show"])->name("apartments.show"); */
 });
 
 require __DIR__.'/auth.php';

@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
 
             $table->string("name");
-            $table->tinyInteger("duration_hours");
+            $table->string("price");
+            $table->integer("duration_hours");
             $table->text("icon_url");
 
             $table->timestamps();
